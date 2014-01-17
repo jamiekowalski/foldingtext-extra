@@ -22,7 +22,7 @@ define(function(require, exports, module) {
              (attributes && attributes.code !== undefined) ) {
                  if (quoteType === 's') {
                      quote = "'"
-                 } else {
+                 } else if (quoteType === 'd') {
                      quote = '"'
                  } else {
                      return;
