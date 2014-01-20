@@ -2,7 +2,7 @@
 
 Inserts smart quotes instead of straight quotes in FoldingText documents.
 
-In most cases, the plugin will insert the quote you want; but note that it only looks at the previous character to determine whether to insert a left- or right-quote, and makes no attempt at matching pairs.
+In most cases, the plugin will insert the quote you want; but note that it only looks at the previous character to determine whether to insert a left- or right-quote, and makes no attempt to match pairs.
 
 It fails in the following cases:
 
