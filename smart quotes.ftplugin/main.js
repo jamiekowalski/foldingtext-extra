@@ -5,13 +5,13 @@ define(function(require, exports, module) {
         var selectedRange = editor.getSelectedRange(),
             length = selectedRange.length(),
             quoteType = type_arg.charAt(0),
-            direction = 'l',
             lsquo = '‘',
             rsquo = '’',
             ldquo = '“',
             rdquo = '”',
             quote = '';
         
+        // check whether we're in a code element
         var node = selectedRange.startNode,
             attributes = node.lineAttributesAtIndex(selectedRange.startOffset),
             nodeType = node.type();
@@ -20,6 +20,8 @@ define(function(require, exports, module) {
              nodeType === 'fencedcode' ||
              nodeType === 'htmlblock' ||
              (attributes && attributes.code !== undefined) ) {
+                 // we're in a code element
+                 
                  if (quoteType === 's') {
                      quote = "'"
                  } else if (quoteType === 'd') {
@@ -28,11 +30,14 @@ define(function(require, exports, module) {
                      return;
                  }
         } else {
-            beforeText = selectedRange.rangeByOffsetting(-1, 
+            // we're in normal text
+            
+            beforeChar = selectedRange.rangeByOffsetting(-1, 
                 1 - length).textInRange();
-            // afterText = selectedRange.rangeByOffsetting(1, 1).textInRange();
-            if (beforeText.match(/\S/)) {   // OR /[\\.,>;:?!“”‘’—\*`%\])}]/
-                direction = 'r';
+            
+            var direction = 'r';
+            if (beforeChar.match(/^[\s\/[({]?$/)) {
+                direction = 'l';
             }
                 
             if (quoteType === 's') {
@@ -53,7 +58,6 @@ define(function(require, exports, module) {
         }
         
         editor.replaceSelection(quote, 'end');
-        // editor.setSelectedRange(editor.getSelectedRange().rangeByOffsetting(+1, -quote.length));
 	}
     
     Extensions.add('com.foldingtext.editor.init', function(editor) {
