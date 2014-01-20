@@ -6,7 +6,7 @@ In most cases, the plugin will insert the quote you want; but note that it only 
 
 It fails in the following cases:
 
-“Still”—he thought—”it might be turn out all right.” (Quotation mark after dash; can't simply always use left quote, since a more common paring of dash and quote is: “That’s all well and good—”)   
+“Still”—he thought—”it might turn out all right.” (Quotation mark after dash; can't simply always use left quote, since a more common paring of dash and quote is: “That’s all well and good—”)   
 In ‘99   
 ‘Twas the night before Christmas   
 Lots ‘n’ lots
