@@ -25,4 +25,6 @@ In ‘99
 ‘Twas the night before Christmas   
 Lots ‘n’ lots
 
-Requires FoldingText 1.3
+To install, add the folder `smart quotes.ftplugin` to your FoldingText plugins folder (find this from the FoldingText app by choosing `File > Open Application Folder`). Quit and re-open FoldingText.
+
+Requires [FoldingText 1.3](http://support.foldingtext.com/discussions/development-versions)

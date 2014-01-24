@@ -152,6 +152,7 @@ define(function(require, exports, module) {
 		description: 'Toggle smart quotes on and off',
 		performCommand: function (editor) {
             var sq = co.jamiekowalski.SmartQuotes;
+            // TODO add support for UserDefaults
             if (sq.enabled) {
                 editor.removeKeyMap(sq.keyMap.name);
                 sq.enabled = false;

@@ -1,0 +1,19 @@
+/* For hiding Critic Markup comments and deletions */
+.hide-critic .cm-comment,
+.hide-critic .cm-del {
+    width: 0;
+    height: 0;
+    display: inline-block;
+    line-height: 0;
+    visibility: hidden;
+}
+.hide-critic .cm-del.cm-criticstart,
+.hide-critic .cm-del.cm-criticend,
+.cm-comment.cm-criticstart,
+.cm-comment.cm-criticend {  
+    width: auto;
+    height: auto;
+    display: inline;
+    line-height: inherit;
+    visibility: visible;
+}
