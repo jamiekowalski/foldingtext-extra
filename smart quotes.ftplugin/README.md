@@ -14,17 +14,17 @@ Also includes some support for non-US keyboard layouts: German and Russian layou
 
 Set the default language and keyboard in the script (look for the text `sq.defaultLanguage = 'en'` near the top). This plugin adds two commands: `smart quotes change language` that allows you to choose a new style of quotation marks without editing the script. Use the following codes (corresponding to the styles listed above): `en` `de` `degu` `fr` `frsp`. `smart quotes toggle` allows you to turn off smart quotes.
 
-In most cases, the plugin will insert the quote you want; but it only looks at the previous character to determine whether to insert a left- or right-quote, and makes no attempt to match pairs.
+To install, add the folder `smart quotes.ftplugin` to your FoldingText plugins folder (find this from the FoldingText app by choosing `File > Open Application Folder`). Quit and re-open FoldingText.
 
-Note that the plugin cannot distinguish between single closing quotation marks and apostrophes in languages (e.g. German) in which the two are different. In that case, apostrophes must be entered manually.
+Requires [FoldingText 1.3](http://support.foldingtext.com/discussions/development-versions)
 
-It also fails in the following cases:
+## Known Issues
+
+In most cases, the plugin will insert the quote you want, but since it only looks at the previous character to determine whether to insert a left- or right-quote (and makes no attempt to match pairs), it will fail in the following cases:
 
 “Still”—he thought—”it might turn out all right.” (Quotation mark after dash; can't simply always use left quote, since a more common paring of dash and quote is: “That’s all well and good—”)   
 In ‘99   
 ‘Twas the night before Christmas   
 Lots ‘n’ lots
 
-To install, add the folder `smart quotes.ftplugin` to your FoldingText plugins folder (find this from the FoldingText app by choosing `File > Open Application Folder`). Quit and re-open FoldingText.
-
-Requires [FoldingText 1.3](http://support.foldingtext.com/discussions/development-versions)
+Note also that the plugin cannot distinguish between single closing quotation marks and apostrophes in languages (e.g. German) in which the two are different. In that case, apostrophes must be entered manually.
