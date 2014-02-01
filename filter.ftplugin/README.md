@@ -37,6 +37,9 @@ Requires FoldingText 1.3 build 716 or later.
 `yesterday or today and tomorrow`
 : items that contains 'yesterday' and 'today' and 'tomorrow'. When a mix of 'and' and 'or' is used, 'or's are changed to 'and'.
 
+any expression ending with `/`
+: show descendants
+
 `#cm`
 : items that contain a Critic Markup command/annotation
 
@@ -55,11 +58,25 @@ Requires FoldingText 1.3 build 716 or later.
 `#st` or `#str` or `#strong`
 : items that contain a Markdown `strong` element
 
+`#job`
+: items that have the property “job”. Properties should be added at the end of a path segment. With the following text, this query with show “John”.
+
+    John
+        job : developer
+
+(add `/` at end to also reveal `job : developer`)
+
+`#job~dev`
+: items that have the property “job” with a value containing “dev”. When using a comparison operator (e.g. `~` – see next item for more), the `#` prefix is unnecessary.
+
+`age>30`, `age<20`, `age>=25`:
+: items that have the property “age” with values < 30, etc.
+
 any expression starting with `>`
 : don't show ancestors
 
 any expression starting with `/`
-: use FoldingText's full XPath syntax instead of the custom syntax
+: use FoldingText's full XPath syntax instead of the modified syntax. See documentation on the [FoldingText website](http://www.foldingtext.com/sdk/nodepaths/).
 
 ## Known Issues
 
