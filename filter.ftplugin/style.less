@@ -1,0 +1,25 @@
+@panel-width: 250px;
+@panel-height: 30px;
+
+.JKPanel {
+    position: fixed;
+    left: 25px;
+    top: 8px;
+    width: @panel-width;
+    height: @panel-height;
+    background-color: white;
+    border-radius: 6px;
+    box-shadow: 1px 3px 10px #999;
+}
+.JKPanel input {
+    margin: 5px 10px;
+    width: @panel-width - 20px;
+    height: @panel-height - 10px;
+    background: inherit;
+    border: none;
+    font-size: 1em;
+    font-family: inherit;
+}
+.JKPanel input:focus {
+    outline-width: 0;
+}
