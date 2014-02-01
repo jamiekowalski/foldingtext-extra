@@ -7,6 +7,8 @@ define(function(require, exports, module) {
     sq.defaultLanguage = 'en';  // 'en', 'de', 'degu', 'fr', 'frsp'
     sq.defaultKeyboard = 'en';  // 'en', 'de', 'ru'
     sq.enabled = true;
+    sq.changeLanguageCmdEnabled = true;
+    sq.toggleCmdEnabled = false;
     
     sq.glyphSets = {
         en: { ls: '‘', rs: '’', ld: '“', rd: '”', desc: 'English'},
@@ -128,38 +130,42 @@ define(function(require, exports, module) {
         defineSmartQuotes(editor) // no additional args: use defaults
     });
     
-	Extensions.add('com.foldingtext.editor.commands', {
-		name: 'smart quotes language',
-		description: 'Change language for smart quotes',
-		performCommand: function (editor) {
-            var gs = co.jamiekowalski.SmartQuotes.glyphSets
-            var promptStr = 'Set language using one of the following codes:\n\n'
-            for (var lang in gs) {
-                promptStr += lang + ' - ' + gs[lang].ld + gs[lang].desc + 
-                    gs[lang].rd + '\n'
-            }
-            promptStr = promptStr.trim()
+    if (sq.changeLanguageCmdEnabled) {
+    	Extensions.add('com.foldingtext.editor.commands', {
+    		name: 'smart quotes language',
+    		description: 'Change language for smart quotes',
+    		performCommand: function (editor) {
+                var gs = co.jamiekowalski.SmartQuotes.glyphSets
+                var promptStr = 'Set language using one of the following codes:\n\n'
+                for (var lang in gs) {
+                    promptStr += lang + ' - ' + gs[lang].ld + gs[lang].desc + 
+                        gs[lang].rd + '\n'
+                }
+                promptStr = promptStr.trim()
             
-            var lang = prompt(promptStr)
-            if (lang) {
-                defineSmartQuotes(editor, lang, 'en');
-            }
-		}
-	});
+                var lang = prompt(promptStr)
+                if (lang) {
+                    defineSmartQuotes(editor, lang, 'en');
+                }
+    		}
+    	});
+    }
     
-	Extensions.add('com.foldingtext.editor.commands', {
-		name: 'smart quotes toggle',
-		description: 'Toggle smart quotes on and off',
-		performCommand: function (editor) {
-            var sq = co.jamiekowalski.SmartQuotes;
-            // TODO add support for UserDefaults
-            if (sq.enabled) {
-                editor.removeKeyMap(sq.keyMap.name);
-                sq.enabled = false;
-            } else {
-                editor.addKeyMap(sq.keyMap);
-                sq.enabled = true;
-            }
-		}
-	});
+    if (sq.toggleCmdEnabled) {
+    	Extensions.add('com.foldingtext.editor.commands', {
+    		name: 'smart quotes toggle',
+    		description: 'Toggle smart quotes on and off',
+    		performCommand: function (editor) {
+                var sq = co.jamiekowalski.SmartQuotes;
+                // TODO add support for UserDefaults
+                if (sq.enabled) {
+                    editor.removeKeyMap(sq.keyMap.name);
+                    sq.enabled = false;
+                } else {
+                    editor.addKeyMap(sq.keyMap);
+                    sq.enabled = true;
+                }
+    		}
+    	});
+    }
 });
