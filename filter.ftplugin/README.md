@@ -80,6 +80,8 @@ any expression starting with `/`
 
 ## Known Issues
 
+If the extension is triggered, and without releasing the Command key, Command+A or Command+Z is pressed, these commands act on the editor.
+
 Terms containing characters other than [a-zA-Z] must be wrapped in quotes.
 
 Cannot undo changes to text in the panel.
