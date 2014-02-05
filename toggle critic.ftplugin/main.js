@@ -1,3 +1,8 @@
+/* ***************************************** *
+ * Toggle Critic Plugin for FoldingText 1.3+
+ * by Jamie Kowalski, github.com/jamiekowalski/foldingtext-plugins
+ * ***************************************** */
+
 define(function(require, exports, module) {
 	var Extensions = require('ft/core/extensions'),
         Dom = require('ft/util/dom'),
