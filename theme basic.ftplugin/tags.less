@@ -1,0 +1,51 @@
+/* == Tags ==================================================================== */
+
+pre[cm-note] {
+    color: gray; // #999;
+    font-style: italic;
+    .leftBorder;   // .leftBorder is defined in base.less
+}
+pre[cm-note] .cm-em {
+    font-weight: bold;
+}
+pre[cm-note] .cm-strong {
+    font-style: normal;
+}
+
+pre[cm-note].cm-unordered,
+pre[cm-note].cm-ordered {
+    padding-left: 0 !important;
+    border-left: none;
+}
+
+pre[cm-done] .cm-text,
+pre[cm-done] .cm-tag {
+    color: #c8c8c8 !important;
+}
+pre[cm-done].cm-unordered.cm-todo-modecontext span.cm-text {
+    text-decoration: none !important;
+}
+pre[cm-done] .cm-checkbox-renderwidget {
+    opacity: 0.2;
+}
+
+pre[cm-aside] {
+    background-color: rgba(0,55,240,0.1);
+    padding: 8px 24px;
+}
+
+pre[cm-im] {                            // "Important"
+    color: #CC4D1C; // #D3601D
+}
+pre[cm-hm] {                            // "Hmmm, don't understand"
+    color: #5A88C7; // #62B2CC
+}
+
+pre[cm-done] .cm-text,                  // Completed task
+pre[cm-used] .cm-text {                 // Quotation already used in a document
+    text-decoration: line-through;
+}
+
+pre[cm-done] .cm-text {
+    color: #808080;
+}

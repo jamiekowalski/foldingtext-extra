@@ -1,0 +1,51 @@
+/* == Folds ==================================================== */
+
+.CodeMirror-widget .cm-fold {
+    opacity: 1;
+}
+.cm-foldedLine .CodeMirror-widget .cm-fold {
+    opacity: 1;
+}
+.CodeMirror .cm-foldedLine .cm-fold:hover {
+    opacity: 1;
+}
+
+.CodeMirror .cm-foldedLineBackground {
+    background-size: 4px 1px;
+    opacity: 1; // 0.25;
+    background-position: center center;
+    width: 174px;
+    margin: 0 auto;
+}
+
+/* === non-retina screens =======================*/
+.cm-editorTopFold {
+    background-image: url(images/topFold.png);
+}
+.cm-fold {
+    background-image: url(images/foldDark.png);
+}
+.cm-foldedLine .CodeMirror-widget .cm-fold {
+    background-image: url(images/foldLight.png);
+}
+.CodeMirror .cm-foldedLineBackground {
+    background-image: url(images/foldedLineBackground.png);
+}
+
+/* === retina screens =======================*/
+@media only screen and (-webkit-min-device-pixel-ratio: 1.5), 
+only screen and (min--moz-device-pixel-ratio: 1.5), 
+only screen and (min-resolution: 240dpi) {    
+    .cm-editorTopFold {
+        background-image: url(images/topFold@2x.png);
+    }
+    .cm-fold {
+        background-image: url(images/foldDark@2x.png);
+    }
+    .cm-foldedLine .CodeMirror-widget .cm-fold {
+        background-image: url(images/foldLight@2x.png);
+    }
+    .CodeMirror .cm-foldedLineBackground {
+        background-image: url(images/foldedLineBackground@2x.png);
+    }
+}
