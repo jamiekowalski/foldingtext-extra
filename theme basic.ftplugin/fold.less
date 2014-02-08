@@ -25,8 +25,11 @@
 .cm-fold {
     background-image: url(images/foldDark.png);
 }
-.cm-foldedLine .CodeMirror-widget .cm-fold {
+.CodeMirror .cm-foldedLine .cm-fold {
     background-image: url(images/foldLight.png);
+}
+.CodeMirror .cm-foldedLine .cm-fold:hover {
+    background-image: url(images/foldDark.png);
 }
 .CodeMirror .cm-foldedLineBackground {
     background-image: url(images/foldedLineBackground.png);
@@ -42,8 +45,11 @@ only screen and (min-resolution: 240dpi) {
     .cm-fold {
         background-image: url(images/foldDark@2x.png);
     }
-    .cm-foldedLine .CodeMirror-widget .cm-fold {
+    .CodeMirror .cm-foldedLine .cm-fold {
         background-image: url(images/foldLight@2x.png);
+    }
+    .CodeMirror .cm-foldedLine .cm-fold:hover {
+        background-image: url(images/foldDark@2x.png);
     }
     .CodeMirror .cm-foldedLineBackground {
         background-image: url(images/foldedLineBackground@2x.png);
