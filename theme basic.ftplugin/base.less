@@ -10,8 +10,8 @@
  *  Variables
  * ************************************************************** */
 
-@font: Seravek, Consolas, 'Courier Prime', Courier; // Seravek is on OS X 10.9
-@lineHeight: 1.2;
+@font: Seravek, 'Source Sans Pro', Consolas, 'Courier Prime', Courier; // Seravek is on OS X 10.9
+@lineHeight: 1.25;
 @tabSize: "8";
 @selectionLeftFillTo: margin;
 @deskColor: #FEFCF6;
@@ -57,37 +57,23 @@ body {
  *  Special item types 
  * ************************************************************** */
 
-.CodeMirror .cm-heading {
-    font-family: Seravek, "Source Sans Pro", Helvetica;
-}
-
 .CodeMirror .cm-heading[cm-level="1"] {
     font-size: 1.4em;
-    text-indent: -11.7pt !important;
+    text-indent: -15.9pt !important;
 }
 .CodeMirror .cm-heading[cm-level="2"] {
     font-size: 1.1em;
-    text-indent: -16pt !important;
+    text-indent: -21pt !important;
 }
 .cm-mode {
     font-weight: normal;
-}
-
-.leftBorder {
-    padding-left: 24px;
-    border-left: 5px solid #ccc;
-}
-
-.CodeMirror pre.cm-blockquote {
-    font-style: normal;
-    margin-left: 60px !important;
-    .leftBorder;
 }
 
 /* == Properties =================================================== */
 
 .cm-propertyname {
     font-weight: normal;
+    font-style: italic;
     color: #aaa;
 }
 .cm-propertyvalue {
