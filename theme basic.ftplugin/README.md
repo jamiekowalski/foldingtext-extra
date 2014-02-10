@@ -9,4 +9,4 @@ Features:
 
 Requires [FoldingText 1.3](http://support.foldingtext.com/discussions/development-versions/)
 
-![Theme Screenshot](assets/theme_screenshot.png)
+![Theme Screenshot](https://raw.github.com/jamiekowalski/foldingtext-extra/master/theme%20basic.ftplugin/assets/theme_screenshot.png)
