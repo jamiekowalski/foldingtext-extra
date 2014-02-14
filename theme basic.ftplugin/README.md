@@ -6,6 +6,7 @@ Features:
 - Custom styling for `@note`, `@aside`, `@im` and other tags
 - Custom fold graphics
 - Custom cursor
+- Retina (and non-retina) graphics
 
 Requires [FoldingText 1.3](http://support.foldingtext.com/discussions/development-versions/)
 
