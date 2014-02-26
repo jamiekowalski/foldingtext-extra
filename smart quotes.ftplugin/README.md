@@ -22,7 +22,7 @@ Requires [FoldingText 1.3](http://support.foldingtext.com/discussions/developmen
 
 In most cases, the plugin will insert the quote you want, but since it only looks at the previous character to determine whether to insert a left- or right-quote (and makes no attempt to match pairs), it will fail in the following cases:
 
-“Still”—he thought—”it might turn out all right.” (Quotation mark after dash; can't simply always use left quote, since a more common paring of dash and quote is: “That’s all well and good—”)   
+> “Still”—he thought—”it might turn out all right.” [Quotation mark after dash; can't simply always use left quote, since a more common paring of dash and quote is: “That’s all well and good—”]   
 In ‘99   
 ‘Twas the night before Christmas   
 Lots ‘n’ lots
