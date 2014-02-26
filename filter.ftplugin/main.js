@@ -1,10 +1,19 @@
+/* ***************************************** *
+ * Filter Plugin for FoldingText 1.3+
+ * by Jamie Kowalski, github.com/jamiekowalski/foldingtext-extra
+ * ***************************************** */
+
 define(function(require, exports, module) {
     'use strict';
     require('./panel.js');
 	var Extensions = require('ft/core/extensions'),
         NodePath = require('ft/core/nodepath').NodePath,
         Editor,
+        HeadingType,
         debug = false
+    
+    // TODO check support for quote-wrapped terms
+    // TODO automatically enclose terms that don't match \w+ with quotes
     
     function insert_ops( string, custom_default ) {
         string = string.trim()
@@ -17,9 +26,9 @@ define(function(require, exports, module) {
             ],
             default_op
 
-        if (string.match(ops[0])) {
+        if (string.match('\\b' + ops[0] + '\\b')) {
             default_op = ops[0]
-        } else if (string.match(ops[1])) {
+        } else if (string.match('\\b' + ops[1] + '\\b')) {
             default_op = ops[1]
         } else if (custom_default) {
             default_op = custom_default
@@ -56,7 +65,7 @@ define(function(require, exports, module) {
             return ''
         }
     
-        s = s.replace(/#?\b([^\s~<>=]+)\s*([~<>=]+)\s*/g, '#$1$2')
+        s = s.replace(/#?\b([^\s~<>=]+)\s*([~=]|[<>]=?)\s*/g, '#$1$2')
         // s = s.replace(/\(#[^\s~<>=]+[~<>=]+[^(]+/g, '$&)')
     
         s = insert_ops( s, defaultOp )
@@ -64,7 +73,8 @@ define(function(require, exports, module) {
         if ( s.match( heading_marker_regex ) ) { // heading
             s = s.replace( heading_marker_regex, '' )
             s = '(' + s + ')'
-            s += ' and @type=heading'
+            s += ' and @type=' + HeadingType
+            if (debug) console.log(HeadingType)
         }
 
         // TODO pull out property queries first
@@ -123,7 +133,7 @@ define(function(require, exports, module) {
             path += '//' + parse_segment(segment, heading_marker);
         });
         
-        if (path.match(/heading$/)) { // last segment is a heading // FIXME magic
+        if (path.match(new RegExp(HeadingType + '$'))) { // last segment is a heading // FIXME magic
             descendants = true
         }
     
@@ -155,7 +165,12 @@ define(function(require, exports, module) {
     }
     
     Extensions.add('com.foldingtext.editor.init', function(editor) {
-        Editor = editor
+        Editor = editor;
+        if (editor.tree().taxonomy.name === 'markdown') {
+            HeadingType = 'heading'
+        } else {
+            HeadingType = 'project'
+        }
         
         JKPanel.addPanel({
             className: 'JKFilterPanel',

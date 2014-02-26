@@ -5,7 +5,7 @@ define(function(require, exports, module) {
         panelEle,
         input,
         panelShown = false,
-        debug = true,
+        debug = false,
         keysDown = {},
         currentValue = '',
         COMMAND_LEFT = 91,

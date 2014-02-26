@@ -2,11 +2,13 @@
 
 Filters a FoldingText document based on an expression given in a simple syntax. For example, the expression `;writ/fiction/@todo` will show only items tagged @todo that are under an item containing the text 'fiction' that is under an heading with the text 'writ' (including partial word matches).
 
-The extension can also be triggered with the keyboard shortcut of Shift+Command+' (this can be changed near the end of the main.js file).
+The extension can also be triggered with the keyboard shortcut Shift+Command+' (this can be changed near the end of the main.js file).
 
 If the path cannot be parsed, a message is logged to the console. (Access the console in FoldingText by holding the Option key when you launch the app; then right-click within the editor and choose 'Inspect Element'.)
 
-Requires FoldingText 1.3 build 716 or later.
+Requires [FoldingText 1.3](http://support.foldingtext.com/discussions/development-versions) build 716 or later.
+
+The extension can also be used with [TaskPaper 3](http://support.foldingtext.com/discussions/development-versions). In TaskPaper, `;` matches projects rather than headings.
 
 ## Examples of expressions:
 
@@ -83,6 +85,8 @@ any expression starting with `/`
 If the extension is triggered, and without releasing the Command key, Command+A or Command+Z is pressed, these commands act on the editor.
 
 Terms containing characters other than [a-zA-Z] must be wrapped in quotes.
+
+Terms wrapped in quotes cannot contain syntax characters – i.e. space, `;`, `#`, `/`, etc.
 
 Cannot undo changes to text in the panel.
 
