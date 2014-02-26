@@ -1,21 +1,41 @@
 /* == Folds ==================================================== */
 
+.cm-foldedLineWrapper {
+    text-align: center;
+    -webkit-mask: none !important;
+}
+
 .CodeMirror-widget .cm-fold {
     width: 19px;
     height: 9px;
     background-size: 19px 9px;
     margin-bottom: 1px;
     opacity: 1.0;
+    -webkit-mask: none !important;
+    // -webkit-mask-size: 19px 9px;
+    background-color: transparent;
 }
-.CodeMirror .cm-foldedLine .cm-fold:hover {
-    opacity: 1.0;
-}
-.CodeMirror .cm-foldedLineBackground {
-    background-size: 4px 1px;
-    opacity: 1.0;
-    background-position: center center;
-    width: 174px;
-    margin: 0 auto;
+.CodeMirror {
+    .cm-foldedLine .cm-fold:hover {
+        opacity: 1.0;
+    }
+    .cm-foldedLineWrapper .lineBackground,
+    .cm-foldedLineWrapper.cm-foldedLineWrapper-at-start .lineBackground,
+    .cm-foldedLineWrapper.cm-foldedLineWrapper-at-end .lineBackground {
+        background-size: 4px 1px;
+        opacity: 1.0;
+        background-position: center center;
+        width: 174px;
+        margin: 0 auto;
+        -webkit-mask: none !important;
+        background-color: transparent;
+        background-repeat: repeat-x;
+    }
+    .cm-editorTopFold {
+        -webkit-mask: none;
+        background-size: 24px 24px;
+        background-color: transparent;
+    }
 }
 
 /* === non-retina screens =======================*/
@@ -25,14 +45,18 @@
 .cm-fold {
     background-image: url(images/foldDark.png);
 }
-.CodeMirror .cm-foldedLine .cm-fold {
-    background-image: url(images/foldLight.png);
-}
-.CodeMirror .cm-foldedLine .cm-fold:hover {
-    background-image: url(images/foldDark.png);
-}
-.CodeMirror .cm-foldedLineBackground {
-    background-image: url(images/foldedLineBackground.png);
+.CodeMirror {
+    .cm-foldedLine .cm-fold {
+        background-image: url(images/foldLight.png);
+    }
+    .cm-foldedLine .cm-fold:hover {
+        background-image: url(images/foldDark.png);
+    }
+    .cm-foldedLineWrapper .lineBackground,
+    .cm-foldedLineWrapper.cm-foldedLineWrapper-at-start .lineBackground,
+    .cm-foldedLineWrapper.cm-foldedLineWrapper-at-end .lineBackground {
+        background-image: url(images/foldedLineBackground.png);
+    }
 }
 
 /* === retina screens =======================*/
@@ -45,13 +69,17 @@ only screen and (min-resolution: 240dpi) {
     .cm-fold {
         background-image: url(images/foldDark@2x.png);
     }
-    .CodeMirror .cm-foldedLine .cm-fold {
-        background-image: url(images/foldLight@2x.png);
-    }
-    .CodeMirror .cm-foldedLine .cm-fold:hover {
-        background-image: url(images/foldDark@2x.png);
-    }
-    .CodeMirror .cm-foldedLineBackground {
-        background-image: url(images/foldedLineBackground@2x.png);
+    .CodeMirror {
+        .cm-foldedLine .cm-fold {
+            background-image: url(images/foldLight@2x.png);
+        }
+        .cm-foldedLine .cm-fold:hover {
+            background-image: url(images/foldDark@2x.png);
+        }
+        .cm-foldedLineWrapper .lineBackground,
+        .cm-foldedLineWrapper.cm-foldedLineWrapper-at-start .lineBackground,
+        .cm-foldedLineWrapper.cm-foldedLineWrapper-at-end .lineBackground {
+            background-image: url(images/foldedLineBackground@2x.png);
+        }
     }
 }

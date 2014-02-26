@@ -53,17 +53,24 @@ body {
     font-weight: bold;
 }
 
+.cm-code {
+    background: rgba(0, 0, 0, 0.08);
+    font-family: Consolas, Menlo, monospace;
+}
+
 /* ************************************************************** *
  *  Special item types 
  * ************************************************************** */
 
-.CodeMirror .cm-heading[cm-level="1"] {
-    font-size: 1.4em;
-    text-indent: -15.9pt !important;
-}
-.CodeMirror .cm-heading[cm-level="2"] {
-    font-size: 1.1em;
-    text-indent: -21pt !important;
+.CodeMirror {
+    .cm-heading[cm-level="1"] {
+        font-size: 1.4em;
+        text-indent: -15.9pt !important;
+    }
+    .cm-heading[cm-level="2"] {
+        font-size: 1.1em;
+        text-indent: -21pt !important;
+    }
 }
 .cm-mode {
     font-weight: normal;

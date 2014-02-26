@@ -13,8 +13,13 @@
 
 pre[cm-note] {
     color: gray; // #999;
-    font-style: italic;
-    .leftBorder;   // .leftBorder is defined in base.less
+    .leftBorder;
+}
+pre[cm-note] .cm-text {
+    font-style: italic; // italic can't be set on the pre: that changes alignment
+}
+pre[cm-note] .cm-tag {
+    font-style: normal;
 }
 pre[cm-note] .cm-em {
     font-weight: bold;
