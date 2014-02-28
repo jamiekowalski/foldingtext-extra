@@ -53,9 +53,17 @@ body {
     font-weight: bold;
 }
 
-.cm-code {
-    background: rgba(0, 0, 0, 0.08);
-    font-family: Consolas, Menlo, monospace;
+.CodeMirror {
+    .cm-code,
+    .cm-codeblock,
+    .cm-fencedcodestart,
+    .cm-fencedcode,
+    .cm-fencedcodeend {
+        font-family: Consolas, Menlo, monospace;
+    }
+    .cm-code {
+        background: rgba(0, 0, 0, 0.08);
+    }
 }
 
 /* ************************************************************** *
