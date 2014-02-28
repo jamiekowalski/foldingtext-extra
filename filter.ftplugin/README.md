@@ -6,7 +6,7 @@ The extension can also be triggered with the keyboard shortcut Shift+Command+' (
 
 If the path cannot be parsed, a message is logged to the console. (Access the console in FoldingText by holding the Option key when you launch the app; then right-click within the editor and choose 'Inspect Element'.)
 
-Requires [FoldingText 1.3](http://support.foldingtext.com/discussions/development-versions) build 716 or later.
+Requires [FoldingText 2.0](http://support.foldingtext.com/discussions/development-versions) build 716 or later.
 
 The extension can also be used with [TaskPaper 3](http://support.foldingtext.com/discussions/development-versions). In TaskPaper, `;` matches projects rather than headings.
 

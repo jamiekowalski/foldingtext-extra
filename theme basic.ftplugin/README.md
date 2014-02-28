@@ -8,6 +8,6 @@ Features:
 - Custom cursor
 - Retina (and non-retina) graphics
 
-Requires [FoldingText 1.3](http://support.foldingtext.com/discussions/development-versions/)
+Requires [FoldingText 2.0](http://support.foldingtext.com/discussions/development-versions/)
 
 ![Theme Screenshot](https://raw.github.com/jamiekowalski/foldingtext-extra/master/theme%20basic.ftplugin/assets/theme_screenshot.png)
