@@ -10,7 +10,7 @@ search_term = URI.decode_www_form_component(search_term_uri)
 
 doc_folder = doc_path.slice(/^.+\//);
 
-files = Dir[doc_folder + '*.{md,ft,txt}']
+files = Dir[doc_folder + '*.{md,ft,txt,png,jpg,jpeg,pdf}']
 
 target_file = nil
 

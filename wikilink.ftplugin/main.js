@@ -5,7 +5,8 @@ define(function(require, exports, module) {
     'use strict';
 
     var Extensions = require('ft/core/extensions'),
-        wikiLinkAttr = 'wikiLink',
+        wikiLinkRE = /\[\[(.*?)\]\]/g,
+        wikiLinkAttr = 'wikilink',
         wikiLinkClass = 'cm-' + wikiLinkAttr,
         debug = false;
         
@@ -18,13 +19,18 @@ define(function(require, exports, module) {
     Extensions.add('com.foldingtext.taxonomy.classifier', {
         classify: function (text, state, previousState) {
             var t = text.escapedText(),
-                s = t.indexOf('[['),
-                e = t.indexOf(']]');
-            if (s !== -1 && e !== -1 && e > s) {
-                text.addAttributeInRange('keyword', '[[', s, 2);
-                text.addAttributeInRange(wikiLinkAttr, t.substr(s + 2, e), s, (e + 2) - s);
-                text.addAttributeInRange('keyword', ']]', e, 2);
-            }
+                match;
+                if (t.indexOf(']]') === -1) {
+                    return;
+                }
+                while ((match = wikiLinkRE.exec(t))) {
+                    var linkText = match[0];
+                    text.addAttributeInRange('keyword', '[[', match.index, 2);
+                    text.addAttributeInRange(wikiLinkAttr, linkText, 
+                        match.index, linkText.length);
+                    text.addAttributeInRange('keyword', ']]', 
+                        match.index + linkText.length - 2, 2);
+                }
         },
         attributesToClear: [wikiLinkAttr]
     });
