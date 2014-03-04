@@ -5,7 +5,8 @@
 require 'uri'
 
 doc_path = ARGV[0]
-search_term = URI.decode_www_form_component(ARGV[1])
+search_term_uri = ARGV[1]
+search_term = URI.decode_www_form_component(search_term_uri)
 
 doc_folder = doc_path.slice(/^.+\//);
 
@@ -29,4 +30,7 @@ if not target_file.nil?
     # this next version will always open in FoldingText, but it sometimes fails due
     # to permissions. May be a sandboxing issue
     # %x[osascript -e 'tell application "FoldingText" to open "#{target_file}"']
+else
+    # if file was not found, search for it in Notational Velocity (or nvALT)
+    %x[open "nv://find/#{search_term_uri}"]
 end

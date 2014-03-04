@@ -29,7 +29,6 @@ define(function(require, exports, module) {
         attributesToClear: [wikiLinkAttr]
     });
     
-    
 	Extensions.add('com.foldingtext.editor.mouse', {
 		mouseDown: function (editor, ev) {
             var ele = ev.target;
