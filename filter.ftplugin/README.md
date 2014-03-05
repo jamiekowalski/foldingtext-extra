@@ -1,5 +1,7 @@
 # Filter: FoldingText Extension
 
+By [Jamie Kowalski](https://github.com/jamiekowalski)
+
 Filters a FoldingText document based on an expression given in a simple syntax. For example, the expression `;writ/fiction/@todo` will show only items tagged @todo that are under an item containing the text 'fiction' that is under an heading with the text 'writ' (including partial word matches).
 
 The extension can also be triggered with the keyboard shortcut Shift+Command+' (this can be changed near the end of the main.js file).
@@ -71,7 +73,7 @@ any expression ending with `/`
 `#job~dev`
 : items that have the property “job” with a value containing “dev”. When using a comparison operator (e.g. `~` – see next item for more), the `#` prefix is unnecessary.
 
-`age>30`, `age<20`, `age>=25`:
+`age>30`, `age<20`, `age>=25`
 : items that have the property “age” with values < 30, etc.
 
 any expression starting with `>`
