@@ -1,12 +1,12 @@
 #!/usr/bin/ruby -w
 
 require 'uri'
-require 'logger'
 
+# search folder strings may start with ~ and final slash is optional
 search_folders = [
     '~/Dropbox/Notes/',
     '~/Dropbox/Notes Archive/',
-    
+    '~/Desktop/'
 ]
 extensions = 'md,ft,txt,png,jpg,jpeg,pdf'
 
@@ -25,41 +25,45 @@ def openInNV search_term
     %x[open "nv://find/#{search_term}"]
 end
 
-if ARGV[0] == '-f'
+search_term_i = 0
+doc_path_i = 1
 
-    search_term_uri = ARGV[1]
-    search_term = URI.decode_www_form_component(search_term_uri)
-    doc_path = ARGV[2]
-    
-    file_glob = search_term.gsub(/[^\w\-]+/, '*') + "*.{#{extensions}}"
-    file_glob.gsub!(/\*+/, '*')
-        
-    if (not doc_path.nil?) and doc_path.length > 0
-        doc_folder = doc_path.slice(/^.+\//)
-        search_folders.unshift doc_folder
-    end
-    
-    target_file = nil
-    search_folders.each do |folder|
-        folder.strip!
-        folder.gsub!(/^~/, Dir.home)
-        folder << '/' if not folder.match(/\/$/)
-        
-        files = Dir.glob(folder + file_glob, File::FNM_CASEFOLD)
-        
-        if files.length > 0
-            target_file = files[0]
-            break
-        end
-    end
-        
-    if not target_file.nil?
-        openFile target_file
-    else
-        # if file was not found, search for it in Notational Velocity (or nvALT)
-        openInNV search_term_uri
-    end
+if ARGV.length < 1 # must be at least 1 argument
+    exit
+end
 
-elsif ARGV[0] == '-n'
-    openInNV ARGV[1]
+search_term_uri = ARGV[search_term_i]
+search_term = URI.decode_www_form_component(search_term_uri)
+doc_path = ''
+if ARGV.length > doc_path_i
+    doc_path = ARGV[doc_path_i]
+end
+
+file_glob = search_term.gsub(/[^\w\-]+/, '*') + "*.{#{extensions}}"
+file_glob.gsub!(/\*+/, '*')
+    
+if doc_path.length > 0
+    doc_folder = doc_path.slice(/^.+\//)
+    search_folders.unshift doc_folder
+end
+
+target_file = nil
+search_folders.each do |folder|
+    folder.strip!
+    folder.gsub!(/^~/, Dir.home)
+    folder << '/' if not folder.match(/\/$/)
+    
+    files = Dir.glob(folder + file_glob, File::FNM_CASEFOLD)
+    
+    if files.length > 0
+        target_file = files[0]
+        break
+    end
+end
+    
+if not target_file.nil?
+    openFile target_file
+else
+    # if file was not found, search for it in Notational Velocity (or nvALT)
+    openInNV search_term_uri
 end
