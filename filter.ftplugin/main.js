@@ -157,7 +157,8 @@ define(function(require, exports, module) {
             parse_result.errorColumn)
         } else {
           if (debug) console.log(path)
-          Editor.setNodePath(path)
+          Editor.setNodePath(path);
+          Editor.performCommand('scrollToBeginningOfDocument');
         }
       } else {
         Editor.performCommand('focusOut') // TODO should only focus out if not already focused out
