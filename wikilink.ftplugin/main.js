@@ -36,6 +36,8 @@ define(function(require, exports, module) {
     });
     
 	Extensions.add('com.foldingtext.editor.mouse', {
+    // see ft/extensions/mouse.js for more info
+    
 		mouseDown: function (editor, ev) {
 		  if ( isWikiLink(ev.target) ) {
 		    return true;  // prevent cursor from being placed
@@ -62,18 +64,18 @@ define(function(require, exports, module) {
         
         // choose action based on initial char
         if (t.charAt(0) === '#') {
-            t = t.substring(1);
-            var path = '//"' + t + '" and @type=heading///*';
-            if (debug) console.log(path);
-            editor.setNodePath(path);
-            editor.performCommand('scrollToBeginningOfDocument');
+          t = t.substring(1);
+          var path = '//"' + t + '" and @type=heading///*';
+          if (debug) console.log(path);
+          editor.setNodePath(path);
+          editor.performCommand('scrollToBeginningOfDocument');
         } else if (t.charAt(0) === '@') {
-            t = t.substring(1).trim();
-            var URL = 'nv://find/' + encodeURIComponent(t);
-            editor.openLink(URL);
+          t = t.substring(1).trim();
+          var URL = 'nv://find/' + encodeURIComponent(t);
+          editor.openLink(URL);
         } else {
-            var URL = 'ftwikilink://?' + encodeURIComponent(t);
-            editor.openLink(URL);
+          var URL = 'ftwikilink://?' + encodeURIComponent(t);
+          editor.openLink(URL);
         }
       }
 		}

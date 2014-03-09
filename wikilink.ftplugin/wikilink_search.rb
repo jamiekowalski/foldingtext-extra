@@ -7,16 +7,18 @@ if RUBY_VERSION.to_f > 1.9
   Encoding.default_internal = Encoding::UTF_8
 end
 
-# search folder strings may start with ~ and final slash is optional
+# search folder strings may start with ~ for home folder; final slash is optional
 search_folders = [
   '~/Dropbox/Notes/',
-  '~/Dropbox/Notes Archive/',
-  '~/Desktop/'
+  '~/Dropbox/Text Files/Reading Notes/',
+  '~/Desktop/',
 ]
-extensions = 'md,ft,txt,png,jpg,jpeg,pdf'        # comma-separated list
+search_current_folder = true
 recursive = true                                 # also search subfolders?
+extensions = 'md,ft,txt,png,jpg,jpeg,pdf'        # comma-separated list
 
 def openFile file
+  
   target_file = file.gsub(/"/){ %q[\"] }
   
   # open the file in the default app for its type
@@ -40,11 +42,8 @@ end
 
 search_term_uri = ARGV[search_term_i]
 search_term = URI.decode_www_form_component(search_term_uri)
-doc_path = ''
-if ARGV.length > doc_path_i
-  doc_path = ARGV[doc_path_i]
-end
 
+# prepare file glob
 file_glob = search_term.gsub(/[^\w\-]+/, '*') + "*.{#{extensions}}"
 file_glob = '*' + file_glob            # allow search to start in middle of filename
 file_glob.gsub!(/\*+/, '*')            # clean up successive *'s
@@ -52,16 +51,25 @@ if recursive
   file_glob = '**/' + file_glob
 end
 
-if doc_path.length > 0
-  doc_folder = doc_path.slice(/^.+\//)
-  search_folders.unshift doc_folder
+# add current folder to search folders
+if search_current_folder
+  doc_path = ''
+  if ARGV.length > doc_path_i
+    doc_path = ARGV[doc_path_i]
+  end
+
+  if doc_path.length > 0
+    doc_folder = doc_path.slice(/^.+\//)
+    search_folders.unshift doc_folder
+  end
 end
 
+# search for file
 target_file = nil
 search_folders.each do |folder|
   folder.strip!
   folder.gsub!(/^~/, Dir.home)
-  folder << '/' if not folder.match(/\/$/)
+  folder << '/' if not folder[-1] == '/'
   
   files = Dir.glob(folder + file_glob, File::FNM_CASEFOLD)
   
@@ -70,7 +78,8 @@ search_folders.each do |folder|
     break
   end
 end
-  
+
+# open file, if found
 if not target_file.nil?
   openFile target_file
 else
