@@ -1,5 +1,7 @@
 # Basic Theme for FoldingText
 
+By [Jamie Kowalski](https://github.com/jamiekowalski)
+
 Features:
 
 - Seravek (sans-serif font included with OS X 10.9)

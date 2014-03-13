@@ -15,13 +15,13 @@
     // -webkit-mask-size: 19px 9px;
     background-color: transparent;
 }
-.CodeMirror {
+.editor .CodeMirror {
     .cm-foldedLine .cm-fold:hover {
         opacity: 1.0;
     }
-    .cm-foldedLineWrapper .lineBackground,
-    .cm-foldedLineWrapper.cm-foldedLineWrapper-at-start .lineBackground,
-    .cm-foldedLineWrapper.cm-foldedLineWrapper-at-end .lineBackground {
+    .cm-foldedLineWrapper .CodeMirror-linebackground,
+    .cm-foldedLineWrapper.cm-foldedLineWrapper-at-start .CodeMirror-lineBackground,
+    .cm-foldedLineWrapper.cm-foldedLineWrapper-at-end .CodeMirror-lineBackground {
         background-size: 4px 1px;
         opacity: 1.0;
         background-position: center center;
@@ -35,6 +35,7 @@
         -webkit-mask: none;
         background-size: 24px 24px;
         background-color: transparent;
+        opacity: 0.6;
     }
 }
 
@@ -52,9 +53,9 @@
     .cm-foldedLine .cm-fold:hover {
         background-image: url(images/foldDark.png);
     }
-    .cm-foldedLineWrapper .lineBackground,
-    .cm-foldedLineWrapper.cm-foldedLineWrapper-at-start .lineBackground,
-    .cm-foldedLineWrapper.cm-foldedLineWrapper-at-end .lineBackground {
+    .cm-foldedLineWrapper .CodeMirror-linebackground,
+    .cm-foldedLineWrapper.cm-foldedLineWrapper-at-start .CodeMirror-linebackground,
+    .cm-foldedLineWrapper.cm-foldedLineWrapper-at-end .CodeMirror-linebackground {
         background-image: url(images/foldedLineBackground.png);
     }
 }
@@ -76,9 +77,9 @@ only screen and (min-resolution: 240dpi) {
         .cm-foldedLine .cm-fold:hover {
             background-image: url(images/foldDark@2x.png);
         }
-        .cm-foldedLineWrapper .lineBackground,
-        .cm-foldedLineWrapper.cm-foldedLineWrapper-at-start .lineBackground,
-        .cm-foldedLineWrapper.cm-foldedLineWrapper-at-end .lineBackground {
+        .cm-foldedLineWrapper .CodeMirror-linebackground,
+        .cm-foldedLineWrapper.cm-foldedLineWrapper-at-start .CodeMirror-linebackground,
+        .cm-foldedLineWrapper.cm-foldedLineWrapper-at-end .CodeMirror-linebackground {
             background-image: url(images/foldedLineBackground@2x.png);
         }
     }

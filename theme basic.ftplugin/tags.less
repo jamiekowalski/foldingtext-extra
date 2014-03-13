@@ -1,19 +1,19 @@
 /* == Tags, etc ================================================================= */
 
 .leftBorder {
-    padding-left: 24px;
-    border-left: 5px solid #ccc;
+    padding-left: 18px;   // doesn't work in 722
+    border-left: 5px solid #ddd;
 }
 
 .CodeMirror pre.cm-blockquote {
     font-style: normal;
-    margin-left: 54px !important;
-    .leftBorder;
+    // margin-left: 60px !important; // doesn't work in 722
+    // .leftBorder;          // doesn't work in 722
 }
 
 pre[cm-note] {
     color: gray; // #999;
-    .leftBorder;
+    // .leftBorder;           // doesn't work in 722
 }
 pre[cm-note] .cm-text {
     font-style: italic; // italic can't be set on the pre: that changes alignment
@@ -30,7 +30,7 @@ pre[cm-note] .cm-strong {
 
 pre[cm-note].cm-unordered,
 pre[cm-note].cm-ordered {
-    padding-left: 0 !important;
+    // padding-left: 0 !important;  // for build 722
     border-left: none;
 }
 
