@@ -2,9 +2,19 @@
 
 require 'uri'
 
+def silence_warnings(&block)
+  warn_level = $VERBOSE
+  $VERBOSE = nil
+  result = block.call
+  $VERBOSE = warn_level
+  result
+end
+
 if RUBY_VERSION.to_f > 1.9
-  Encoding.default_external = Encoding::UTF_8
-  Encoding.default_internal = Encoding::UTF_8
+  silence_warnings do
+    Encoding.default_external = Encoding::UTF_8
+    Encoding.default_internal = Encoding::UTF_8
+  end
 end
 
 # search folder strings may start with ~ for home folder; final slash is optional
@@ -16,13 +26,36 @@ search_folders = [
 search_current_folder = true
 recursive = true                                 # also search subfolders?
 extensions = 'md,ft,txt,png,jpg,jpeg,pdf'        # comma-separated list
+ft_extensions = 'md,ft'
+filter_delim = '#'
+applescript_path = Dir.home + '/Library/Containers/com.foldingtext.FoldingText/' + 
+  'Data/Library/Application Support/FoldingText/Plug-Ins/wikilink.ftplugin/' + 
+  'Open document with filter.scpt'
 
-def openFile file
+def openFile( file, filter_path, applescript_path, ft_extensions, filter_delim )
   
   target_file = file.gsub(/"/){ %q[\"] }
   
-  # open the file in the default app for its type
-  %x[open "#{target_file}"]
+  ft_extensions = ft_extensions.dup.gsub(',', '|')
+  
+  if target_file.match(Regexp.new(%[\.(#{ft_extensions})$]))
+    
+    if filter_path.nil?
+      filter_path = ""
+    else
+      if filter_path[0] == filter_delim
+        filter_path = filter_path[1..-1]
+      end
+      
+      filter_path = "//#{filter_path} and @type=heading///*"
+    end
+    
+    filter_path.gsub!(/"/){ %q[\"]} 
+    %x[osascript "#{applescript_path}" "#{target_file}" "#{filter_path}"]
+  else
+    # open the file in the default app for its type
+    %x[open "#{target_file}"]
+  end
   
   # this next version will always open in FoldingText, but it sometimes fails due
   # to permissions. May be a sandboxing issue
@@ -42,6 +75,13 @@ end
 
 search_term_uri = ARGV[search_term_i]
 search_term = URI.decode_www_form_component(search_term_uri)
+
+filter_path = nil
+if not search_term[filter_delim].nil?
+  index = search_term.index filter_delim
+  filter_path = search_term[index..-1].strip
+  search_term = search_term[0..index-1].strip
+end
 
 # prepare file glob
 file_glob = search_term.gsub(/[^\w\-]+/, '*') + "*.{#{extensions}}"
@@ -81,8 +121,8 @@ end
 
 # open file, if found
 if not target_file.nil?
-  openFile target_file
+  openFile( target_file, filter_path, applescript_path, ft_extensions, filter_delim )
 else
   # if file was not found, search for it in Notational Velocity (or nvALT)
-  openInNV search_term_uri
+  openInNV( search_term_uri )
 end

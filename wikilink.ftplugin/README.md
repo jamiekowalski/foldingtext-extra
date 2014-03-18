@@ -2,19 +2,23 @@
 
 Enables WikiLink syntax: `[[Link Text]]`.
 
+Note: this extension is very experimental.
+
 ## Opening Files
 
 When the link is clicked, the folder containing the current document will be searched, and the first matched document will be opened. Fallback folders can be specified in the script; if no match was found in the original folder, these folders will be searched successively until a match is found.
 
-If no match is found in any folder, the link text will be searched within [Notational Velocity](http://notational.net) or [nvALT](http://brettterpstra.com/projects/nvalt/).
+If no matching file is found in any folder, the link text will be searched within [Notational Velocity](http://notational.net) or [nvALT](http://brettterpstra.com/projects/nvalt/).
 
 To explicitly search Notational Velocity, prefix the link text with `@`.
 
+The link text can optionally be followed by `#` and heading text to focus in the linked document. Thus the link [[German History #Enlightenment]] will open a document matching "german history" and focus any heading containing the text "enlightenment". [Currently this does not work correctly unless the linked document is already open.]
+
+Alternately, start the link text with `#` to focus the corresponding heading in the present document.
+
+## File Matching Details
+
 The file search uses case-insensitive file globbing, with each character of the search term except for word characters and `-` replaced with `*`. Folders are searched recursively (this can be disabled at the top of `wikilink_search.rb`). For example, the link `[[link text]]` will result in the glob string `folder/**/*link*text*.{extensions}`, where extensions is a list of recognized extensions (which can be customized at the top of the Ruby file).
-
-## Cross-Referencing
-
-If the link text is prefixed with `#`, clicking the link will focus the corresponding heading in the document; this allows for cross-referencing within the same document.
 
 ## To Install
 
