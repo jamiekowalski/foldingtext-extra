@@ -26,7 +26,7 @@ search_folders = [
 search_current_folder = true
 recursive = true                                 # also search subfolders?
 extensions = 'md,ft,txt,png,jpg,jpeg,pdf'        # comma-separated list
-ft_extensions = 'md,ft'
+ft_extensions = 'md,ft,txt'                      # filetypes to open with FoldingText
 filter_delim = '#'
 applescript_path = Dir.home + '/Library/Containers/com.foldingtext.FoldingText/' + 
   'Data/Library/Application Support/FoldingText/Plug-Ins/wikilink.ftplugin/' + 
@@ -46,8 +46,10 @@ def openFile( file, filter_path, applescript_path, ft_extensions, filter_delim )
       if filter_path[0] == filter_delim
         filter_path = filter_path[1..-1]
       end
+      filter_path.gsub!(/[^\-\w]/, ' ')   # except \w or dash, replace with space
+      filter_path.gsub!(/\s+/, ' and ')
       
-      filter_path = "//#{filter_path} and @type=heading///*"
+      filter_path = "//#{filter_path} and @type=heading///*/ancestor-or-self::*"
     end
     
     filter_path.gsub!(/"/){ %q[\"]} 
