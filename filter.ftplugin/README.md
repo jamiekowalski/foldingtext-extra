@@ -2,15 +2,15 @@
 
 By [Jamie Kowalski](https://github.com/jamiekowalski)
 
-Filters a FoldingText document based on an expression given in a simple syntax. For example, the expression `;writ/fiction/@todo` will show only items tagged @todo that are under an item containing the text 'fiction' that is under an heading with the text 'writ' (including partial word matches).
+Filters a FoldingText document based on an expression given in a simple syntax. For example, the expression `;writ/fiction/@todo` will show only items tagged @todo that are under an item containing the text 'fiction' that is under an heading with the text 'writ' (including partial word matches, so ‘writing’ would be matched).
 
 The extension can also be triggered with the keyboard shortcut Shift+Command+' (this can be changed near the end of the main.js file).
 
-If the path cannot be parsed, a message is logged to the console. (Access the console in FoldingText by holding the Option key when you launch the app; then right-click within the editor and choose 'Inspect Element'.)
-
-Requires [FoldingText 2.0](http://support.foldingtext.com/discussions/development-versions) build 716 or later.
+If the path cannot be parsed, a message is logged to the console. (Access the console in FoldingText choosing Help > SDK Runner and clicking the gear icon in the window that opens.)
 
 The extension can also be used with [TaskPaper 3](http://support.foldingtext.com/discussions/development-versions). In TaskPaper, `;` matches projects rather than headings.
+
+Requires [FoldingText 2.0](http://support.foldingtext.com/discussions/development-versions) build 723 or later, or [TaskPaper 3.0](http://support.foldingtext.com/discussions/development-versions).
 
 ## Examples of expressions:
 
@@ -42,7 +42,7 @@ The extension can also be used with [TaskPaper 3](http://support.foldingtext.com
 : items that contains 'yesterday' and 'today' and 'tomorrow'. When a mix of 'and' and 'or' is used, 'or's are changed to 'and'.
 
 any expression ending with `/`
-: show descendants
+: show descendants (descendants are always shown if the last segment in the expression is a heading)
 
 `#cm`
 : items that contain a Critic Markup command/annotation
@@ -68,7 +68,7 @@ any expression ending with `/`
     John
         job : developer
 
-(add `/` at end to also reveal `job : developer`)
+Add `/` at end to also reveal `job : developer`
 
 `#job~dev`
 : items that have the property “job” with a value containing “dev”. When using a comparison operator (e.g. `~` – see next item for more), the `#` prefix is unnecessary.
@@ -76,20 +76,22 @@ any expression ending with `/`
 `age>30`, `age<20`, `age>=25`
 : items that have the property “age” with values < 30, etc.
 
-any expression starting with `>`
+any expression starting or ending with `*`
 : don't show ancestors
 
 any expression starting with `/`
-: use FoldingText's full XPath syntax instead of the modified syntax. See documentation on the [FoldingText website](http://www.foldingtext.com/sdk/nodepaths/).
+: use FoldingText's full XPath syntax instead of the modified syntax described here. See documentation on the [FoldingText website](http://www.foldingtext.com/sdk/nodepaths/).
 
 ## Known Issues
 
-If the extension is triggered, and without releasing the Command key, Command+A or Command+Z is pressed, these commands act on the editor.
+- If the extension is triggered, and without releasing the Command key, Command+A or Command+Z is pressed, these commands act on the editor.
+- Terms containing non-word must be wrapped in quotes.
+- Syntax characters – i.e. space, `;`, `#`, `/`, etc. – will always be recognized by such, even if wrapped in quotes.
+- Cannot undo changes to text in the panel.
+- The escape key closes the panel on keyup, not keydown, resulting in an apparent lag.
 
-Terms containing characters other than [a-zA-Z] must be wrapped in quotes.
+## Planned Features
 
-Terms wrapped in quotes cannot contain syntax characters – i.e. space, `;`, `#`, `/`, etc.
-
-Cannot undo changes to text in the panel.
-
-The escape key closes the panel on keyup, not keydown, resulting in an apparent lag.
+- Save named queries.
+- Escape key returns to view (and selection) before opening filter pane. This would make it easy to quickly get a different view of the document, but return directly back to where you were.
+- Display a list of tags when a `@` is typed.
