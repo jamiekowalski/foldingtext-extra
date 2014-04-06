@@ -41,9 +41,9 @@ define(function(require, exports, module) {
 		mouseDown: function (editor, ev) {
 		  if ( isWikiLink(ev.target) ) {
 		    return true;  // prevent cursor from being placed
-		  } else {
-		    return false;
-		  }
+		  }/* else {
+		    return false;   // maybe this causes problems, i.e. with clicking checkboxes
+		  }*/
 		},
     mouseUp: function (editor, ev) {
       var ele = ev.target;

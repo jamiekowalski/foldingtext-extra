@@ -24,9 +24,10 @@ search_folders = [
   '~/Desktop/',
 ]
 search_current_folder = true
-recursive = true                                 # also search subfolders?
-extensions = 'md,ft,txt,png,jpg,jpeg,pdf'        # comma-separated list
-ft_extensions = 'md,ft,txt'                      # filetypes to open with FoldingText
+recursive = true                                # also search subfolders?
+extensions = 'md,ft,txt,png,jpg,jpeg,pdf'       # comma-separated list
+ft_extensions = 'md,ft,txt'                     # set this to filetypes registered
+                                                # to open with FoldingText
 filter_delim = '#'
 applescript_path = Dir.home + '/Library/Containers/com.foldingtext.FoldingText/' + 
   'Data/Library/Application Support/FoldingText/Plug-Ins/wikilink.ftplugin/' + 

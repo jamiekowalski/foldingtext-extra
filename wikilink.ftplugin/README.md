@@ -30,6 +30,5 @@ Before using, edit the settings at the top of `wikilink_search.rb`.
 
 Requires [FoldingText 2.0](http://support.foldingtext.com/discussions/development-versions/)
 
-## Known Issues
+<!-- ## Known Issues -->
 
-- If FoldingText has not opened the linked file before, there will be a permissions error.
