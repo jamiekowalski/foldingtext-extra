@@ -7,13 +7,17 @@
 
 .CodeMirror pre.cm-blockquote {
     font-style: normal;
-    // margin-left: 60px !important; // doesn't work in 722
-    // .leftBorder;          // doesn't work in 722
+    color: #666;
+    .leftBorder;
+}
+pre.cm-blockquote .cm-keyword-start {
+  color: #ccc !important;
+  border: none !important;
 }
 
 pre[cm-note] {
     color: gray; // #999;
-    // .leftBorder;           // doesn't work in 722
+    .leftBorder;           // doesn't work in 722
 }
 pre[cm-note] .cm-text {
     font-style: italic; // italic can't be set on the pre: that changes alignment
