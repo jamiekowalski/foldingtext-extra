@@ -18,8 +18,10 @@ Download the [ZIP of this repository](https://github.com/jamiekowalski/foldingte
 
 ## Change log
 
+- 0.2
+	- Pressing escape when panel is open returns document view path and selection to state before opening panel.
 - 0.1
-    - Pressing escape when panel is open returns document view path and selection to state before opening panel.
+	- Initial release.
 
 ## Examples of expressions:
 
