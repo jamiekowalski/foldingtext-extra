@@ -22,7 +22,7 @@ The file search uses case-insensitive file globbing, with each character of the 
 
 ## To Install
 
-Download the [ZIP of this repository](https://github.com/jamiekowalski/foldingtext-extra/archive/master.zip) and move the `wikilink.ftplugin` to your FoldingText plug-ins folder (open this from FoldingText by choosing File > Open Application Folder).
+Download the [ZIP of this repository](https://github.com/jamiekowalski/foldingtext-extra/archive/master.zip) and move the `wikilink.ftplugin` to your FoldingText plug-ins folder (open this from FoldingText by choosing File > Open Application Folder). Restart FoldingText.
 
 This extension will most likely fail to run at first because of the Gate Keeper security system. You can circumvent this by right-clicking on the .app, selecting “Open”; when prompted, allow the app to open. The extension should now work.
 
@@ -30,5 +30,6 @@ Before using, edit the settings at the top of `wikilink_search.rb`.
 
 Requires [FoldingText 2.0](http://support.foldingtext.com/discussions/development-versions/)
 
-<!-- ## Known Issues -->
+## Known Issues
 
+- When using a link with a filter parameter, an permissions error message will occasionaly show. Click the OK button, and script should continue normally.
