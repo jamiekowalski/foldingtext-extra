@@ -54,7 +54,6 @@ define(function(require, exports, module) {
       } else if (event.which === COMMAND_RIGHT) {  // right command
         keysDown[COMMAND_RIGHT] = false;
       } else if (event.which === ESC) {  // escape
-        console.log(input);
         properties.onescape(panelEle, input);
         return;
       }

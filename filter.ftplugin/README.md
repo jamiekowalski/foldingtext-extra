@@ -19,7 +19,7 @@ Download the [ZIP of this repository](https://github.com/jamiekowalski/foldingte
 ## Change log
 
 - 0.2
-	- Pressing escape when panel is open returns document view path and selection to state before opening panel.
+	- Dismissing the panel with `Escape` returns document view and selection to state before opening panel; this makes it easy to quickly view different queries, then return directly back to where you were. Press `Return` or click within the document to dismiss the pane and keep the newly queried view.
 - 0.1
 	- Initial release.
 
@@ -104,5 +104,4 @@ any expression starting with `/`
 ## Planned Features
 
 - Save named queries.
-- Escape key returns to view (and selection) before opening filter pane. This would make it easy to quickly get a different view of the document, but return directly back to where you were.
 - Display a list of tags when a `@` is typed.
