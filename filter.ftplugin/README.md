@@ -4,13 +4,22 @@ By [Jamie Kowalski](https://github.com/jamiekowalski)
 
 Filters a FoldingText document based on an expression given in a simple syntax. For example, the expression `;writ/fiction/@todo` will show only items tagged @todo that are under an item containing the text 'fiction' that is under an heading with the text 'writ' (including partial word matches, so ‘writing’ would be matched).
 
-The extension can also be triggered with the keyboard shortcut Shift+Command+' (this can be changed near the end of the main.js file).
+The extension can also be triggered with the keyboard shortcut Shift+Command+' (i.e. quote key). Tthis can be changed near the end of the main.js file.
 
 If the path cannot be parsed, a message is logged to the console. (Access the console in FoldingText choosing Help > SDK Runner and clicking the gear icon in the window that opens.)
 
 The extension can also be used with [TaskPaper 3](http://support.foldingtext.com/discussions/development-versions). In TaskPaper, `;` matches projects rather than headings.
 
 Requires [FoldingText 2.0](http://support.foldingtext.com/discussions/development-versions) build 723 or later, or [TaskPaper 3.0](http://support.foldingtext.com/discussions/development-versions).
+
+## To Install
+
+Download the [ZIP of this repository](https://github.com/jamiekowalski/foldingtext-extra/archive/master.zip) and move the `filter.ftplugin` to your FoldingText plug-ins folder (open this from FoldingText by choosing File > Open Application Folder). Restart FoldingText.
+
+## Change log
+
+- 0.1
+    - Pressing escape when panel is open returns document view path and selection to state before opening panel.
 
 ## Examples of expressions:
 
@@ -85,7 +94,7 @@ any expression starting with `/`
 ## Known Issues
 
 - If the extension is triggered, and without releasing the Command key, Command+A or Command+Z is pressed, these commands act on the editor.
-- Terms containing non-word must be wrapped in quotes.
+- Terms containing non-word characters must be wrapped in quotes.
 - Syntax characters – i.e. space, `;`, `#`, `/`, etc. – will always be recognized by such, even if wrapped in quotes.
 - Cannot undo changes to text in the panel.
 - The escape key closes the panel on keyup, not keydown, resulting in an apparent lag.

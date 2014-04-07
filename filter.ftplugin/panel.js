@@ -54,6 +54,7 @@ define(function(require, exports, module) {
       } else if (event.which === COMMAND_RIGHT) {  // right command
         keysDown[COMMAND_RIGHT] = false;
       } else if (event.which === ESC) {  // escape
+        console.log(input);
         properties.onescape(panelEle, input);
         return;
       }
@@ -92,13 +93,13 @@ define(function(require, exports, module) {
     document.body.insertBefore(panelEle)
   }
 
-  p.showPanel = function() {
+  p.showPanel = function () {
     panelEle.style.display = 'block'
     input.select()  // select contents, and focus
     currentValue = input.value
     panelShown = true;
-  }
-  p.hidePanel = function(keepContents) {
+  };
+  p.hidePanel = function (keepContents) {
     if (! keepContents) {
       input.value = ''
     }
@@ -106,13 +107,16 @@ define(function(require, exports, module) {
     panelEle.style.display = 'none'
     Editor.focus()
     panelShown = false;
-  }
-  p.togglePanel = function() {
+  };
+  p.togglePanel = function () {
     if (panelShown) {
       p.hidePanel()                
     } else {
       p.showPanel()
     }
+  };
+  p.clearPanel = function () {
+    input.value = '';
   }
 
   Extensions.add('com.foldingtext.editor.init', function(editor) {

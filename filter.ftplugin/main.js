@@ -11,6 +11,8 @@ define(function(require, exports, module) {
       NodePath = require('ft/core/nodepath').NodePath,
       Editor,
       HeadingType,
+      prevNodePath,
+      prevSelectedRange,
       debug = false
   
   // TODO check support for quote-wrapped terms
@@ -177,52 +179,68 @@ define(function(require, exports, module) {
       Editor.performCommand('focusOut') // TODO should only focus out if not already focused out
     }
   }
+  
+  function show_filter_panel(editor) {
+    prevNodePath = editor.nodePath().nodePathString;
+    prevSelectedRange = editor.selectedRange();
+    JKPanel.showPanel();
+  }
+  
+  function hide_filter_panel(panelEle, input) {
+    // input.dispatchEvent(new CustomEvent('blur'))
+    JKPanel.hidePanel(false);
+    if (prevNodePath) {
+      Editor.setNodePath(prevNodePath);
+    }
+    if (prevSelectedRange) {
+      Editor.setSelectedRange(prevSelectedRange)
+    }
+  }
     
 	Extensions.add('com.foldingtext.editor.commands', {
 		name: 'filter',
-      performCommand: function (editor) {
-        JKPanel.togglePanel()
+    performCommand: show_filter_panel
+  });
+    
+  Extensions.add('com.foldingtext.editor.init', function(editor) {
+    Editor = editor;
+    if (editor.tree().taxonomy.name === 'markdown') {
+      HeadingType = 'heading'
+    } else {
+      HeadingType = 'project'
+    }
+    
+    JKPanel.addPanel({
+      className: 'JKFilterPanel',
+      placeholder: 'enter expression...',
+      onreturn: function(panelEle, input) {
+        filter_by_path(parse_path(input.value))
+      },
+      onescape: function(panelEle, input) {
+        // if (input.value.match('^\\s*$')) {  // add if to clear pane on first esc
+          hide_filter_panel(panelEle, input)
+        /* } else {
+          console.log(JKPanel)
+          JKPanel.clearPanel();
+        } */
+      },
+      onchange: function(panelEle, input) {  // TODO change to 'onkeyup' or 'ontextchange'
+        filter_by_path(parse_path(input.value))
       }
     });
     
-    Extensions.add('com.foldingtext.editor.init', function(editor) {
-      Editor = editor;
-      if (editor.tree().taxonomy.name === 'markdown') {
-        HeadingType = 'heading'
-      } else {
-        HeadingType = 'project'
-      }
+    editor.addKeyMap({
+      "Shift-Cmd-'" : show_filter_panel
       
-      JKPanel.addPanel({
-        className: 'JKFilterPanel',
-        placeholder: 'enter expression...',
-        onreturn: function(panelEle, input) {
-          filter_by_path(parse_path(input.value))
-        },
-        onescape: function(panelEle, input) {
-          // input.dispatchEvent(new CustomEvent('blur'))
-          JKPanel.hidePanel(false)
-          // editor.performCommand('focusOut')
-        },
-        onchange: function(panelEle, input) {  // TODO change to 'onkeyup' or 'ontextchange'
-          filter_by_path(parse_path(input.value))
-        }
-      });
-      
-      editor.addKeyMap({
-        "Shift-Cmd-'" : function (editor) {
-          JKPanel.togglePanel();
-        }
-        
-        /* Info about keyboard shortcuts
-         * from http://codemirror.net/doc/manual.html#keymaps
-         * 
-         * Examples of names defined here are Enter, F5, and Q. These can be 
-         * prefixed with Shift-, Cmd-, Ctrl-, and Alt- (in that order!) to 
-         * specify a modifier. So for example, Shift-Ctrl-Space would be a valid
-         * key identifier.
-         */
+      /* Info about keyboard shortcuts
+       * from http://codemirror.net/doc/manual.html#keymaps
+       * 
+       * Examples of names defined here are Enter, F5, and Q. These can be 
+       * prefixed with Shift-, Cmd-, Ctrl-, and Alt- (in that order!) to 
+       * specify a modifier. So for example, Shift-Ctrl-Space would be a valid
+       * key identifier.
+       */
 
-      })
-    });
+    })
+  });
 });
