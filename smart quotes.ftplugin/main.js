@@ -27,7 +27,8 @@ define(function(require, exports, module) {
     sq.shortcutSets = {
         en: { s: "'", d: "Shift-'" , desc: 'English'},
         de: { s: "Shift-3", d: "Shift-'", desc: 'German' },
-        ru: { s: "Shift-3", d: "Shift-'", desc: 'Russian' }
+        ru: { s: "Shift-3", d: "Shift-'", desc: 'Russian' },
+        decu: { s: "Alt-'", d: 'Shift-Alt-\'', desc: 'German Custom' },
         // Codemirror keymaps are difficult with non-US keyboards
         
         /* Info about keyboard shortcuts
@@ -167,7 +168,7 @@ define(function(require, exports, module) {
     		description: 'Change language for smart quotes',
     		performCommand: function (editor) {
                 var gs = SmartQuotes.glyphSets
-                var promptStr = 'Set language using one of the following codes:\n\n'
+                var promptStr = 'Set language using one of the following codes:\n'
                 for (var lang in gs) {
                     promptStr += lang + ' - ' + gs[lang].ld + gs[lang].desc + 
                         gs[lang].rd + '\n'
@@ -188,7 +189,7 @@ define(function(require, exports, module) {
     		description: 'Change keyboard shortcuts for smart quotes',
     		performCommand: function (editor) {            
                 var ks = SmartQuotes.shortcutSets;
-                var promptStr = 'Set keyboard using one of the following codes:\n\n';
+                var promptStr = 'Set keyboard using one of the following codes:\n';
                 for (var kb in ks) {
                     promptStr += kb + ' - ' + ks[kb].desc + '\n'
                 }

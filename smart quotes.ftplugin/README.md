@@ -1,5 +1,7 @@
 # Smart Quotes: FoldingText Plugin
 
+By [Jamie Kowalski](https://github.com/jamiekowalski)
+
 Inserts smart quotes instead of straight quotes in FoldingText documents.
 
 Includes support for the following quotation styles:
