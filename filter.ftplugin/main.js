@@ -5,12 +5,14 @@
 
 define(function(require, exports, module) {
   'use strict';
-  require('./panel.js');
+  require('./panel.js');  // TODO panel should be a class, of which this file
+                          // creates an instance
 	
+  // TODO Perhaps I should collect all file-wide vars and functions into an object
   var Extensions = require('ft/core/extensions'),
       NodePath = require('ft/core/nodepath').NodePath,
-      Editor,
-      HeadingType,
+      editor,         // this variable is assigned in the 'init' function below
+      headingType,
       prevNodePath,
       prevSelectedRange,
       debug = false
@@ -39,6 +41,10 @@ define(function(require, exports, module) {
     } else {
       default_op = ops[1];
     }
+    
+    // TODO to deal with quotes and parentheses, use stack-based parsing. Create a
+    // regex like (\s+|["']|[()]), then push quotes and parentheses on stack; ignore
+    // everything between quotes, etc.
 
     // protect 'not'
     string = string.replace(/\b(not)\b\s*/g, '$1' + protector);
@@ -79,14 +85,18 @@ define(function(require, exports, module) {
       s = insert_ops( s, defaultOp );
 
       s = '(' + s + ')';
-      s += ' and @type=' + HeadingType;
+      s += ' and @type=' + headingType;
       
-      if (debug) console.log(HeadingType);
+      if (debug) console.log(headingType);
     } else {                                      // non-heading
       s = insert_ops( s, defaultOp );
     }
 
     // TODO pull out property queries first
+    
+    // allow paths to contain "union" "intersect" "except"; by wrapping in quotes
+    // TODO maybe should allow these as functions instead?
+    s = s.replace(/([^'"]|^)(union|intersect|except)([^'"]|$)/, '"$2"');
 
     // transform inline types and properties
     s = s.replace(/#cm\b/g, '@line:comment');
@@ -150,7 +160,7 @@ define(function(require, exports, module) {
     });
     
     // modify path for options
-    if (path.match(new RegExp(HeadingType + '$'))) { // last segment is a heading // FIXME magic
+    if (path.match(new RegExp(headingType + '$'))) { // last segment is a heading // FIXME magic
       descendants = true
     }
     if (descendants) {
@@ -172,16 +182,17 @@ define(function(require, exports, module) {
           parse_result.errorColumn)
       } else {
         if (debug) console.log(path)
-        Editor.setNodePath(path);
-        Editor.performCommand('scrollToBeginningOfDocument');
+        editor.setNodePath(path);
+        editor.performCommand('scrollToBeginningOfDocument');
       }
     } else {
-      Editor.performCommand('focusOut') // TODO should only focus out if not already focused out
+      editor.performCommand('focusOut') // TODO should only focus out if not already focused out
     }
   }
   
-  function show_filter_panel(editor) {
-    prevNodePath = editor.nodePath().nodePathString;
+  function show_filter_panel() { // could take editor as argument, but not needed
+    prevNodePath = editor.nodePath(); // .nodePathString; // don't need string
+                      // editor.setNodePath can take either string or NodePath object
     prevSelectedRange = editor.selectedRange();
     JKPanel.showPanel();
   }
@@ -190,10 +201,10 @@ define(function(require, exports, module) {
     // input.dispatchEvent(new CustomEvent('blur'))
     JKPanel.hidePanel(false);
     if (prevNodePath) {
-      Editor.setNodePath(prevNodePath);
+      editor.setNodePath(prevNodePath);
     }
     if (prevSelectedRange) {
-      Editor.setSelectedRange(prevSelectedRange)
+      editor.setSelectedRange(prevSelectedRange)
     }
   }
     
@@ -202,12 +213,13 @@ define(function(require, exports, module) {
     performCommand: show_filter_panel
   });
     
-  Extensions.add('com.foldingtext.editor.init', function(editor) {
-    Editor = editor;
+  Extensions.add('com.foldingtext.editor.init', function(ed) {
+    editor = ed;             // TODO This is a hack
+                             // code should be restructured to avoid global objects
     if (editor.tree().taxonomy.name === 'markdown') {
-      HeadingType = 'heading'
+      headingType = 'heading'
     } else {
-      HeadingType = 'project'
+      headingType = 'project'
     }
     
     JKPanel.addPanel({

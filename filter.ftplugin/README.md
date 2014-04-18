@@ -103,5 +103,6 @@ any expression starting with `/`
 
 ## Planned Features
 
+- Use new query to combine with current view: union, intersect, or not.
 - Save named queries.
 - Display a list of tags when a `@` is typed.

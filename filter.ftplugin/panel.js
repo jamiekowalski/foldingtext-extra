@@ -2,7 +2,7 @@ define(function(require, exports, module) {
   'use strict';
   
 	var Extensions = require('ft/core/extensions'),
-    Editor,
+    editor,          // this variable is assigned in the 'init' function below
     panelEle,
     input,
     panelShown = false,
@@ -16,9 +16,11 @@ define(function(require, exports, module) {
     KEY_Z = 90
         
     
-  window.JKPanel = {}
+  window.JKPanel = {}     // TODO Should not create global variable;
+                          // rather pass the variable back from the require function
   var p = window.JKPanel
   
+  // TODO change this to the constructor of a JKPanel class
   p.addPanel = function(properties) {
     panelEle = document.createElement('form')
     panelEle.className = 'JKPanel'
@@ -32,8 +34,6 @@ define(function(require, exports, module) {
     if (properties.className) {
       panelEle.classList.add(properties.className)
     }
-    // input.setAttribute('autocorrect', 'off') // Don't think this does anything
-                                                // on Mac OS
     
     panelEle.insertBefore(input)
     
@@ -49,11 +49,11 @@ define(function(require, exports, module) {
       if (debug) console.log(event.which)
       if (debug) console.log(keysDown)
       
-      if (event.which === COMMAND_LEFT) {
+      if (event.which === COMMAND_LEFT) {          // left command key
         keysDown[COMMAND_LEFT] = false;
-      } else if (event.which === COMMAND_RIGHT) {  // right command
+      } else if (event.which === COMMAND_RIGHT) {  // right command key
         keysDown[COMMAND_RIGHT] = false;
-      } else if (event.which === ESC) {  // escape
+      } else if (event.which === ESC) {            // escape key
         properties.onescape(panelEle, input);
         return;
       }
@@ -65,10 +65,12 @@ define(function(require, exports, module) {
       
       properties.onchange(panelEle, input)
     })
+    
     // capture paste from menu bar, etc.
     input.addEventListener('input', function(event) {
       input.dispatchEvent(new CustomEvent('keyup'))
-    })
+    });
+    
     input.addEventListener('keydown', function(event) {
       if (event.which === COMMAND_LEFT) {
         keysDown[COMMAND_LEFT] = true;
@@ -87,7 +89,7 @@ define(function(require, exports, module) {
           event.preventDefault()
         }
       }
-    })
+    });
     
     document.body.insertBefore(panelEle)
   }
@@ -104,7 +106,7 @@ define(function(require, exports, module) {
     }
     currentValue = input.value
     panelEle.style.display = 'none'
-    Editor.focus()
+    editor.focus()
     panelShown = false;
   };
   p.togglePanel = function () {
@@ -118,8 +120,9 @@ define(function(require, exports, module) {
     input.value = '';
   }
 
-  Extensions.add('com.foldingtext.editor.init', function(editor) {
-      Editor = editor
+  Extensions.add('com.foldingtext.editor.init', function(ed) {
+    editor = ed;    // TODO This is a hack
+                    // code should be restructured to avoid global objects
   });
     
 });
