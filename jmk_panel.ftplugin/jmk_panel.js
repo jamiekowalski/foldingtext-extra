@@ -19,10 +19,10 @@
  * var panel = new Panel({
  *   className: 'MyPanel',
  *   placeholder: 'type some text...',
- *   onReturn: function (event, panel) {},
- *   onEscape: function (event, panel) {},
  *   onTextChange: function (event, panel) {},
  *   onBlur: function (event, panel) {},
+ *   onReturn: function (event, panel) {},
+ *   onEscape: function (event, panel) {},
  *   onCommand: function (event, panel) {}, // use event.which to determine which
  *                                          // key other than Command is pressed
  *   ignoreWhiteSpace: true,     // don't get changes in leading/trailing whitespace
@@ -54,10 +54,10 @@ define(function(require, exports, module) {
     this.options = {
       className: '',
       placeholder: 'enter text...',
-      onReturn: no_op,
-      onEscape: no_op,
       onTextChange: no_op,
       onBlur: no_op,
+      onReturn: no_op,
+      onEscape: no_op,
       onCommand: no_op,
       ignoreWhiteSpace: true,
       addToDOM: true

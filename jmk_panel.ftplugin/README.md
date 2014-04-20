@@ -18,23 +18,23 @@ var Panel = require('./jmk_panel.js').Panel; // Note .Panel at end
 var panel = new Panel({
   className: 'MyPanel',
   placeholder: 'type some text...',
-  onReturn: function (event, panel) {},
-  onEscape: function (event, panel) {},
   onTextChange: function (event, panel) {},
   onBlur: function (event, panel) {},
+  onReturn: function (event, panel) {},
+  onEscape: function (event, panel) {},
   onCommand: function (event, panel) {},
   ignoreWhiteSpace: true,
   addToDOM: true
 });
 ```
 
-`onReturn` — called when the return or enter key is pressed.
-
-`onEscape` — called when escape key is pressed.
-
 `onTextChange` — called when the contents of the panel is changed.
 
 `onBlur` — called when the panel’s text input is unfocused (e.g. by clicking outside the panel).
+
+`onReturn` — called when the return or enter key is pressed. By default simply calls `onBlur`.
+
+`onEscape` — called when escape key is pressed.
 
 `onCommand` — called when a Command + key combination is pressed. Use `event.which` to determine which key is pressed.
 
