@@ -9,6 +9,7 @@
     font-style: normal;
     color: #666;
     .leftBorder;
+    margin-left: @paperLeftMargin !important;
 }
 pre.cm-blockquote .cm-keyword-start {
   color: #ccc !important;
@@ -17,7 +18,7 @@ pre.cm-blockquote .cm-keyword-start {
 
 pre[cm-note] {
     color: gray; // #999;
-    .leftBorder;           // doesn't work in 722
+    .leftBorder;
 }
 pre[cm-note] .cm-text {
     font-style: italic; // italic can't be set on the pre: that changes alignment
@@ -34,13 +35,15 @@ pre[cm-note] .cm-strong {
 
 pre[cm-note].cm-unordered,
 pre[cm-note].cm-ordered {
-    // padding-left: 0 !important;  // for build 722
+    padding-left: 0 !important;
     border-left: none;
 }
 
 pre[cm-done] .cm-text,
-pre[cm-done] .cm-tag {
-    color: #c8c8c8 !important;
+pre[cm-done] .cm-tag,
+pre[cm-drop] .cm-text,      // dropped tasks
+pre[cm-drop] .cm-tag {
+  color: #c8c8c8 !important;
 }
 pre[cm-done].cm-unordered.cm-todo-modecontext span.cm-text {
     text-decoration: none !important;

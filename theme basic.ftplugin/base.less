@@ -16,6 +16,16 @@
 @selectionLeftFillTo: margin;
 @deskColor: #FEFCF6;
 @paperColor: @deskColor;
+@paperTopMargin:    4rem;
+@paperRightMargin:  4rem;
+@paperLeftMargin:   4rem;
+
+@interfaceColor: #5A88C7;
+@cursorColor: @interfaceColor;
+// @paperBottomMargin: 4rem;
+
+// @selectionBackgroundColor
+// @focusedSelectionBackgroundColor
 
 /* ************************************************************** *
  *  General
@@ -31,10 +41,9 @@ body {
     margin-top: -3px;
 }
 
-.CodeMirror div.CodeMirror-cursor,
 .CodeMirror div.CodeMirror-textDropCursor { // textDropCursor is used when insteting
                                             // dragged text
-    border-left: 2px solid #5A88C7;
+    border-color: #333;
     // .line-select-position;
 }
 .CodeMirror div.CodeMirror-textDropCursor {
@@ -59,10 +68,10 @@ body {
     .cm-fencedcodestart,
     .cm-fencedcode,
     .cm-fencedcodeend {
-        font-family: Consolas, Menlo, monospace;
+      font-family: Consolas, Menlo, monospace;
     }
     .cm-code {
-        background: rgba(0, 0, 0, 0.08);
+      background: rgba(0, 0, 0, 0.08);
     }
 }
 
