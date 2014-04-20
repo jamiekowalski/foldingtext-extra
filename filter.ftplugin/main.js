@@ -8,7 +8,7 @@ define(function(require, exports, module) {
   
   var Extensions = require('ft/core/extensions'),
       NodePath = require('ft/core/nodepath').NodePath,
-			Panel = require('./jmkpanel.js').Panel,
+			Panel = require('../jmk_panel.ftplugin/jmk_panel.js').Panel,
       editor,         // this variable is assigned in the 'init' function below
       panel,
       headingType,

@@ -14,7 +14,9 @@ Requires [FoldingText 2.0](http://support.foldingtext.com/discussions/developmen
 
 ## To Install
 
-Download the [ZIP of this repository](https://github.com/jamiekowalski/foldingtext-extra/archive/master.zip) and move the `filter.ftplugin` to your FoldingText plug-ins folder (open this from FoldingText by choosing File > Open Application Folder). Restart FoldingText.
+Download the [ZIP of this repository](https://github.com/jamiekowalski/foldingtext-extra/archive/master.zip) and move `filter.ftplugin` and `jmk_panel.ftplugin` to your FoldingText plug-ins folder (open this from FoldingText by choosing File > Open Application Folder). Restart FoldingText.
+
+Important: this plugin requires `jmk_panel.ftplugin`.
 
 ## Change log
 
