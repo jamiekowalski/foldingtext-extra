@@ -1,7 +1,9 @@
 /* ------------------------------------------------------------- *
  * Panel Module for FoldingText 2.0 Plugins
  * by Jamie Kowalski, github.com/jamiekowalski/foldingtext-extra
- *
+ * Use of this code and associated files is permitted without restriction, provided
+ * the above attribution and this statement are included in all copies of this code.
+ * 
  * Usage:
  * 
  * The event callback functions are passed the event object and the panel object;
@@ -165,7 +167,7 @@ define(function(require, exports, module) {
           event.preventDefault();
         }
         
-      } else if (event.which === COMMAND_LEFT) {     // command keys pressed
+      } else if ( event.which === COMMAND_LEFT ) {     // command keys pressed
         this.keysDown[COMMAND_LEFT] = true;
       } else if ( event.which === COMMAND_RIGHT ) {
         this.keysDown[COMMAND_RIGHT] = true;
@@ -173,7 +175,7 @@ define(function(require, exports, module) {
         
         var performDefault;
         if ( this.options.onEscape && this.options.onEscape !== no_op ) {
-          this.options.onEscape(event, this);
+          this.options.onEscape( event, this );
         }
         if ( performDefault !== false ) {        // panel's default behavior
           this.hide(false);
@@ -185,7 +187,7 @@ define(function(require, exports, module) {
         
         var performDefault;
         if ( this.options.onCommand && this.options.onCommand !== no_op ) {
-          var performDefault = this.options.onCommand(event, this);
+          var performDefault = this.options.onCommand( event, this );
         }
         if (performDefault !== false ) {
           if ( event.which === KEY_A ) {           // Command + A
@@ -199,57 +201,57 @@ define(function(require, exports, module) {
       }
     }).bind(this));
     
-    if (this.options.addToDOM) {
-      document.body.insertBefore(this.element);
+    if ( this.options.addToDOM ) {
+      document.body.insertBefore( this.element );
     }
   }
   
-  Object.defineProperty(p.prototype, 'keysDown', { value: {} });  
+  Object.defineProperty( p.prototype, 'keysDown', { value: {} } );
   
   p.prototype.addToDOM = function () {
-    document.body.insertBefore(this.element);
+    document.body.insertBefore( this.element );
   };
-  p.prototype.show = function (text) {
-    if (text) {
+  p.prototype.show = function ( text ) {
+    if ( text ) {
       this.input.value = text;
     }
     this.element.style.display = 'block';
     this.input.select();          // select contents, and focus input
-    if (this.options.ignoreWhiteSpace) {
+    if ( this.options.ignoreWhiteSpace ) {
       this.currentValue = this.input.value.trim();
     }
     this.isShown = true;
   };
-  p.prototype.hide = function (keepContents) {
-    if (! keepContents) {
+  p.prototype.hide = function ( keepContents ) {
+    if ( ! keepContents === true ) {
       this.input.value = '';
     }
-    if (this.options.ignoreWhiteSpace) {
+    if ( this.options.ignoreWhiteSpace ) {
       this.currentValue = this.input.value.trim();
     }
     this.element.style.display = 'none';
     editor.focus();
     this.isShown = false;
   };
-  p.prototype.toggle = function () {
-    if (this.isShown) {
-      this.hide()                
+  p.prototype.toggle = function ( keepContents, text ) {
+    if ( this.isShown ) {
+      this.hide( keepContents );
     } else {
-      this.show()
+      this.show( text );
     }
   };
   p.prototype.clear = function () {
     this.input.value = '';
   };
   p.prototype.value = function () {
-    if (this.options.ignoreWhiteSpace) {
+    if ( this.options.ignoreWhiteSpace ) {
       return this.input.value.trim();
     } else {
       return this.input.value;
     }
   };
 
-  Extensions.add('com.foldingtext.editor.init', function(ed) {
+  Extensions.add('com.foldingtext.editor.init', function( ed ) {
     editor = ed;
   });
 

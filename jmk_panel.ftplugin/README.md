@@ -56,7 +56,7 @@ panel.input — the text `<input>` element of the panel.
 
 `panel.hide([bool] keepContents)` — hide the panel, optionally specifying whether to keep the contents (defaults to false).
 
-`panel.toggle()` — toggle the panel.
+`panel.toggle([bool] keepContents, [string] text)` — toggle the panel; boolean to determine keeping of contents when hiding; text to display in panel when showing.
 
 `panel.clear()` — clear the contents of the panel.
 
