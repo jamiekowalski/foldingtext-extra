@@ -18,6 +18,8 @@ Download the [ZIP of this repository](https://github.com/jamiekowalski/foldingte
 
 ## Change log
 
+- 0.3
+	- jmkpanel.js now uses a constructor function and is more configurable, for ease of using it in other plugins. See the file header for details.
 - 0.2
 	- Dismissing the panel with `Escape` returns document view and selection to state before opening panel; this makes it easy to quickly view different queries, then return directly back to where you were. Press `Return` or click within the document to dismiss the pane and keep the newly queried view.
 - 0.1
@@ -99,7 +101,6 @@ any expression starting with `/`
 - Terms containing non-word characters must be wrapped in quotes.
 - Syntax characters – i.e. space, `;`, `#`, `/`, etc. – will always be recognized by such, even if wrapped in quotes.
 - Cannot undo changes to text in the panel.
-- The escape key closes the panel on keyup, not keydown, resulting in an apparent lag.
 
 ## Planned Features
 

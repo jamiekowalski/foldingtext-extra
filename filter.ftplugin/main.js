@@ -5,13 +5,12 @@
 
 define(function(require, exports, module) {
   'use strict';
-  require('./panel.js');  // TODO panel should be a class, of which this file
-                          // creates an instance
-	
-  // TODO Perhaps I should collect all file-wide vars and functions into an object
+  
   var Extensions = require('ft/core/extensions'),
       NodePath = require('ft/core/nodepath').NodePath,
+			Panel = require('./jmkpanel.js').Panel,
       editor,         // this variable is assigned in the 'init' function below
+      panel,
       headingType,
       prevNodePath,
       prevSelectedRange,
@@ -21,7 +20,7 @@ define(function(require, exports, module) {
   // TODO automatically enclose terms that don't match \w+ with quotes
   
   // insert boolean operators between tokens
-  function insert_ops( string, custom_default ) {
+  function insertOps( string, custom_default ) {
     string = string.trim()
     if (! string.match(/ /)) return string  // if no spaces, return immediately
 
@@ -66,7 +65,7 @@ define(function(require, exports, module) {
     return string.trim();
   }
 
-  function parse_segment( input, heading_marker ) {
+  function parseSegment( input, heading_marker ) {
     var s = input.trim(),
         defaultOp = 'and',
         heading_marker_regex = new RegExp( '^' + heading_marker + '\\s*' )
@@ -82,14 +81,14 @@ define(function(require, exports, module) {
     if ( s.match( heading_marker_regex ) ) {      // heading
       s = s.replace( heading_marker_regex, '' );
 
-      s = insert_ops( s, defaultOp );
+      s = insertOps( s, defaultOp );
 
       s = '(' + s + ')';
       s += ' and @type=' + headingType;
       
       if (debug) console.log(headingType);
     } else {                                      // non-heading
-      s = insert_ops( s, defaultOp );
+      s = insertOps( s, defaultOp );
     }
 
     // TODO pull out property queries first
@@ -111,7 +110,7 @@ define(function(require, exports, module) {
     return s;
   }
 
-  function parse_path( input ) {
+  function parsePath( input ) {
     var input = input.trim(),
         delim = '/',
         heading_marker = ';',
@@ -156,11 +155,12 @@ define(function(require, exports, module) {
 
     // process segments and build path
     segments.forEach(function(segment) {
-      path += '//' + parse_segment(segment, heading_marker);
+      path += '//' + parseSegment(segment, heading_marker);
     });
     
     // modify path for options
-    if (path.match(new RegExp(headingType + '$'))) { // last segment is a heading // FIXME magic
+    if (path.match(new RegExp(headingType + '$'))) { // last segment is a heading
+                                                     // FIXME magic
       descendants = true
     }
     if (descendants) {
@@ -173,7 +173,7 @@ define(function(require, exports, module) {
     return path
   }
   
-  function filter_by_path(path) {
+  function filterByPath(path) {
     if (path && ! path.match(/^ +$/)) {
         
       var parse_result = NodePath.parse(path)
@@ -190,59 +190,51 @@ define(function(require, exports, module) {
     }
   }
   
-  function show_filter_panel() { // could take editor as argument, but not needed
-    prevNodePath = editor.nodePath(); // .nodePathString; // don't need string
-                      // editor.setNodePath can take either string or NodePath object
+  function showFilterPanel() {
+    prevNodePath = editor.nodePath();
     prevSelectedRange = editor.selectedRange();
-    JKPanel.showPanel();
+    panel.show();
   }
   
-  function hide_filter_panel(panelEle, input) {
-    // input.dispatchEvent(new CustomEvent('blur'))
-    JKPanel.hidePanel(false);
+  function hideFilterPanel(panelEle, input) {
     if (prevNodePath) {
       editor.setNodePath(prevNodePath);
     }
     if (prevSelectedRange) {
       editor.setSelectedRange(prevSelectedRange)
     }
+    panel.hide(false);
   }
     
 	Extensions.add('com.foldingtext.editor.commands', {
-		name: 'filter',
-    performCommand: show_filter_panel
+		name: 'jk filter',
+    performCommand: showFilterPanel
   });
     
   Extensions.add('com.foldingtext.editor.init', function(ed) {
     editor = ed;             // TODO This is a hack
-                             // code should be restructured to avoid global objects
     if (editor.tree().taxonomy.name === 'markdown') {
       headingType = 'heading'
     } else {
       headingType = 'project'
     }
     
-    JKPanel.addPanel({
+    panel = new Panel({
       className: 'JKFilterPanel',
       placeholder: 'enter expression...',
-      onreturn: function(panelEle, input) {
-        filter_by_path(parse_path(input.value))
+      onReturn: function() {
+        filterByPath(parsePath(panel.input.value));
       },
-      onescape: function(panelEle, input) {
-        // if (input.value.match('^\\s*$')) {  // add if to clear pane on first esc
-          hide_filter_panel(panelEle, input)
-        /* } else {
-          console.log(JKPanel)
-          JKPanel.clearPanel();
-        } */
+      onEscape: function() {
+        hideFilterPanel();
       },
-      onchange: function(panelEle, input) {  // TODO change to 'onkeyup' or 'ontextchange'
-        filter_by_path(parse_path(input.value))
+      onTextChange: function() {
+        filterByPath(parsePath(panel.input.value));
       }
-    });
+    })
     
     editor.addKeyMap({
-      "Shift-Cmd-'" : show_filter_panel
+      "Shift-Cmd-'" : showFilterPanel
       
       /* Info about keyboard shortcuts
        * from http://codemirror.net/doc/manual.html#keymaps
