@@ -74,7 +74,7 @@ define(function(require, exports, module) {
       }
     }
     
-    this.isShown = false;
+    this.isShown = false;    // TODO hide this property
     this.currentValue = '';
     
     // add unsettable properties
@@ -208,9 +208,12 @@ define(function(require, exports, module) {
   
   p.prototype.addToDOM = function () {
     document.body.insertBefore(this.element);
-  }
-  p.prototype.show = function () {
-    this.element.style.display = 'block'
+  };
+  p.prototype.show = function (text) {
+    if (text) {
+      this.input.value = text;
+    }
+    this.element.style.display = 'block';
     this.input.select();          // select contents, and focus input
     if (this.options.ignoreWhiteSpace) {
       this.currentValue = this.input.value.trim();
@@ -219,13 +222,13 @@ define(function(require, exports, module) {
   };
   p.prototype.hide = function (keepContents) {
     if (! keepContents) {
-      this.input.value = ''
+      this.input.value = '';
     }
     if (this.options.ignoreWhiteSpace) {
       this.currentValue = this.input.value.trim();
     }
-    this.element.style.display = 'none'
-    editor.focus()
+    this.element.style.display = 'none';
+    editor.focus();
     this.isShown = false;
   };
   p.prototype.toggle = function () {
