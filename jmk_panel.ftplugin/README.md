@@ -13,7 +13,7 @@ Return false from a function to prevent the default behavior (e.g. closing panel
 on return).
 
 ```javascript
-var Panel = require('./panel.js').Panel;
+var Panel = require('./jmk_panel.js').Panel; // Note .Panel at end
 
 var panel = new Panel({
   className: 'MyPanel',
@@ -56,8 +56,8 @@ panel.input — the text `<input>` element of the panel.
 
 `panel.hide([bool] keepContents)` — hide the panel, optionally specifying whether to keep the contents (defaults to false).
 
-panel.toggle() — toggle the panel.
+`panel.toggle()` — toggle the panel.
 
-panel.clear() — clear the contents of the panel.
+`panel.clear()` — clear the contents of the panel.
 
-panel.value() — get the contents of the text input. Unless `ignoreWhiteSpace` in the constructor is set to `false`, leading/trailing white space of the value will be trimmed.
+`panel.value()` — get the contents of the text input. Unless `ignoreWhiteSpace` in the constructor is set to `false`, leading/trailing white space of the value will be trimmed.
