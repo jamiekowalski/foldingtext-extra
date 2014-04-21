@@ -220,19 +220,23 @@ define(function(require, exports, module) {
     }
     this.element.style.display = 'block';
     this.input.focus();
-    if ( selection ) {
-      if ( selection === 'around' ) {
-        this.input.select();          // select contents
-      } else if ( selection === 'start' ) {
-        this.input.setSelectionRange(0, 0);
-      } else if ( selection === 'end' ) {
-        var length = this.input.value.length
-        this.input.setSelectionRange(length, length);
-      } else if (typeof selection === 'number' ) {
-        var end = selectionEnd || selection;
-        this.input.setSelectionRange(selection, end);
-      }
+    
+    if (! selection || selection === 'around' ) {
+      this.input.select();          // select contents
+    } else if ( selection === 'start' ) {
+      this.input.setSelectionRange(0, 0);
+    } else if ( selection === 'end' ) {
+      var length = this.input.value.length
+      this.input.setSelectionRange(length, length);
+    } else if (typeof selection === 'number' ) {
+      var end = selectionEnd || selection;
+      this.input.setSelectionRange(selection, end);
+    } else if ( selection === 'preserve' ) {
+      // do nothing
+    } else {
+      this.input.select();          // select for other values
     }
+
     if ( this.options.ignoreWhiteSpace ) {
       this.currentValue = this.input.value.trim();
     }
