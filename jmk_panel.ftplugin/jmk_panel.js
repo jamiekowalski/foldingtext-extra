@@ -40,8 +40,7 @@ define(function(require, exports, module) {
   // Panel constructor; assigned to exports.Panel below
   var p = function (opts) {
     
-    var commonClassName = 'JKPanel',
-      COMMAND_LEFT = 91,
+    var COMMAND_LEFT = 91,
       COMMAND_RIGHT = 93,
       RETURN = 13,
       ESC = 27,
@@ -52,7 +51,7 @@ define(function(require, exports, module) {
     
     // define default options
     this.options = {
-      className: '',
+      className: 'JKPanel',
       placeholder: 'enter text...',
       onTextChange: no_op,
       onBlur: no_op,
@@ -93,7 +92,6 @@ define(function(require, exports, module) {
     
     // set panel attributes
     this.element.style.display = 'none';       // don't show panel at first
-    this.element.className = commonClassName;
     
     this.input.setAttribute('type', 'text');
     this.input.setAttribute('value', '');
@@ -103,6 +101,9 @@ define(function(require, exports, module) {
     }
     
     this.element.insertBefore(this.input); // add the input to the panel
+    
+    
+    // EVENTS
     
     // when editor is clicked, etc.
     this.input.addEventListener('blur', (function(event) {
@@ -200,6 +201,8 @@ define(function(require, exports, module) {
         
       }
     }).bind(this));
+    
+    // Add panel to DOM
     
     if ( this.options.addToDOM ) {
       document.body.insertBefore( this.element );
