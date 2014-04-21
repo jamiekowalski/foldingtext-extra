@@ -214,12 +214,25 @@ define(function(require, exports, module) {
   p.prototype.addToDOM = function () {
     document.body.insertBefore( this.element );
   };
-  p.prototype.show = function ( text ) {
-    if ( text ) {
+  p.prototype.show = function ( text, selection, selectionEnd ) {
+    if ( text || text === '' ) {
       this.input.value = text;
     }
     this.element.style.display = 'block';
-    this.input.select();          // select contents, and focus input
+    this.input.focus();
+    if ( selection ) {
+      if ( selection === 'around' ) {
+        this.input.select();          // select contents
+      } else if ( selection === 'start' ) {
+        this.input.setSelectionRange(0, 0);
+      } else if ( selection === 'end' ) {
+        var length = this.input.value.length
+        this.input.setSelectionRange(length, length);
+      } else if (typeof selection === 'number' ) {
+        var end = selectionEnd || selection;
+        this.input.setSelectionRange(selection, end);
+      }
+    }
     if ( this.options.ignoreWhiteSpace ) {
       this.currentValue = this.input.value.trim();
     }

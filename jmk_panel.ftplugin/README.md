@@ -52,7 +52,7 @@ panel.input — the text `<input>` element of the panel.
 
 `panel.addToDOM()` — add panel to DOM (if you did not have it added upon creation)
 
-`panel.show([string] text)` — show the panel (with optional text)
+`panel.show([string] text, [text or num] selection, [num] selectionEnd)` — show the panel, with optional text (an empty string clears the panel; use `false` to retain previous contents). Optionally specify how the text should be selected: 'start', 'around', 'end', one number for cursor position, two numbers for selection.
 
 `panel.hide([bool] keepContents)` — hide the panel, optionally specifying whether to keep the contents (defaults to false).
 
