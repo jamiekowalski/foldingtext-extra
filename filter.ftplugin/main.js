@@ -210,7 +210,7 @@ define(function(require, exports, module) {
 		name: 'jk filter',
     performCommand: showFilterPanel
   });
-    
+  
   Extensions.add('com.foldingtext.editor.init', function(ed) {
     editor = ed;             // TODO This is a hack
     if (editor.tree().taxonomy.name === 'markdown') {
@@ -220,7 +220,6 @@ define(function(require, exports, module) {
     }
     
     panel = new Panel({
-      className: 'JKFilterPanel',
       placeholder: 'enter expression...',
       onReturn: function() {
         filterByPath(parsePath(panel.input.value));
