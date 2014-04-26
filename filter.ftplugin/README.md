@@ -2,6 +2,8 @@
 
 By [Jamie Kowalski](https://github.com/jamiekowalski)
 
+![Filter plugin screenshot](https://raw.githubusercontent.com/jamiekowalski/foldingtext-extra/master/filter.ftplugin/filter_screenshot.png)
+
 Filters a FoldingText document based on an expression given in a simple syntax. For example, the expression `;writ/fiction/@todo` will show only items tagged @todo that are under an item containing the text 'fiction' that is under an heading with the text 'writ' (including partial word matches, so ‘writing’ would be matched).
 
 The extension can also be triggered with the keyboard shortcut Shift+Command+' (i.e. quote key). Tthis can be changed near the end of the main.js file.
