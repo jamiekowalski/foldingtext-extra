@@ -11,14 +11,25 @@
  * ************************************************************** */
 
 @fontFamily: Seravek, 'Source Sans Pro', Consolas, 'Courier Prime', Courier; // Seravek is on OS X 10.9
+@inkColor: black;
+@textColor: @inkColor;
+@deskColor: #FEFCF6;
+@paperColor: @deskColor;
+@keywordColor: mix(@textColor, @paperColor, 25%);
+
 @lineHeight: 1.25;
 @tabSize: 8;
 @selectionLeftFillTo: margin;
-@deskColor: #FEFCF6;
-@paperColor: @deskColor;
 @paperTopMargin:    4rem;
 @paperRightMargin:  4rem;
 @paperLeftMargin:   4rem;
+
+@codeblockFontSize:   90%;
+@codeblockFontFamily: Consolas, Menlo, monospace;
+@codeblockColor: black;
+@codeblockBackgroundColor: mix(transparent, @textColor, 97%);
+@codeblockBorder: 1px solid mix(transparent, @textColor, 75%);
+@codeblockBorderRadius: 0.2rem;
 
 @interfaceColor: #5A88C7;
 @cursorColor: @interfaceColor;
@@ -33,7 +44,7 @@
 
 body {
     -webkit-font-smoothing: subpixel-antialiased !important;
-    // text-rendering: optimizeSpeed; // this set in FoldingText default
+    text-rendering: optimizeSpeed; // this set in FoldingText default
     font-size: 1.05em;
 }
 
@@ -73,6 +84,71 @@ body {
     .cm-code {
       background: rgba(0, 0, 0, 0.08);
     }
+}
+
+.CodeMirror {
+  .cm-codeblock, .cm-htmlblock, .cm-fencedcode,
+  .cm-fencedcodetopboundary, .cm-fencedcodebottomboundary {
+	  font-family: @codeblockFontFamily;
+    font-weight: normal;
+  	background: @codeblockBackgroundColor;
+  }
+
+  .cm-fencedcodetopboundary .cm-keyword, .cm-fencedcodebottomboundary .cm-keyword {
+	  font-family: @codeblockFontFamily;
+    font-weight: normal;
+    color: @keywordColor;
+  }
+
+  .cm-fencedcodetopboundary {
+  	border-top: @codeblockBorder;    
+  }
+  .cm-fencedcodebottomboundary {
+  	border-bottom: @codeblockBorder;
+  }
+}
+
+.cm-code {
+	font-size: @codeblockFontSize;
+	font-family: @codeblockFontFamily;
+	color: @codeblockColor;
+}
+
+.cm-code-start {
+	margin-left: 0.1rem;
+	border-left: @codeblockBorder;
+	border-top-left-radius: @codeblockBorderRadius;
+	border-bottom-left-radius: @codeblockBorderRadius;
+}	
+
+.cm-code-end {
+	margin-right: 0.1rem;
+	border-right: @codeblockBorder;
+	border-top-right-radius: @codeblockBorderRadius;
+	border-bottom-right-radius: @codeblockBorderRadius;
+}
+
+.CodeMirror {
+  .cm-tag-start,
+  .cm-tagname,
+  .cm-tag-end {
+    border: 1px solid rgba(0,0,0,0.06);
+    background: rgba(0,0,0,0.04);
+  }
+  .cm-tag-start {
+    padding-left: 2px;
+    border-radius: 5px 0 0 5px;
+    border-right: none;
+  }
+  .cm-tag-end {
+    padding-right: 2px;
+    border-radius: 0 5px 5px 0;
+    border-left: none;
+  }
+  .cm-tagname:hover {
+    color: mix(@interfaceColor, #ffffff, 80%);
+    text-decoration: none;
+  }
 }
 
 /* ************************************************************** *
