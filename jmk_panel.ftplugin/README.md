@@ -2,6 +2,8 @@
 
 By [Jamie Kowalski](github.com/jamiekowalski/foldingtext-extra)
 
+NOTE: This is a beta version. Future API changes may break plugins. See change log for details.
+
 ## Constructor
 
 The event callback functions are passed the event object and the panel object;
@@ -23,6 +25,8 @@ var panel = new Panel({
   onReturn: function (event, panel) {},
   onEscape: function (event, panel) {},
   onCommand: function (event, panel) {},
+  onMenuSelect: function (event, panel, value) {},
+  spaceSelectsMenuItem: false,
   ignoreWhiteSpace: true,
   addToDOM: true
 });
@@ -32,11 +36,15 @@ var panel = new Panel({
 
 `onBlur` — called when the panel’s text input is unfocused (e.g. by clicking outside the panel).
 
-`onReturn` — called when the return or enter key is pressed. By default simply calls `onBlur`.
+`onReturn` — called when the return or enter key is pressed.
 
 `onEscape` — called when escape key is pressed.
 
 `onCommand` — called when a Command + key combination is pressed. Use `event.which` to determine which key is pressed.
+
+`onMenuSelect` — called when an item is selected from the drop-down menu. The `value` argument is the text of the selected item.
+
+`spaceSelectsMenuItem` — choose whether pressing the space key will select the active menu item. Defaults to false.
 
 `ignoreWhiteSpace` — don’t call `onTextChange` when leading or trailing whitespace changes; also trims return value for `panel.value()`.
 
@@ -68,3 +76,25 @@ panel.input — the text `<input>` element of the panel.
 `panel.clear()` — clear the contents of the panel.
 
 `panel.value()` — get the contents of the text input. Unless `ignoreWhiteSpace` in the constructor is set to `false`, leading/trailing white space of the value will be trimmed.
+
+`panel.isShown()` – returns boolean.
+
+`panel.showMenu(query, items)` – show the drop-down menu, with items (array of strings), filtered by query (string or RegExp). If subsequent calls pass the identical array for items, menu will not be rebuilt, but simply filtered.
+
+`panel.hideMenu()`
+
+`panel.isMenuShown()` – returns boolean.
+
+## Change Log
+
+- v0.4
+	- Added drop-down menu. Changes should be backwards-compatible.
+- v0.3
+	- Module separaged from filter.ftplugin
+	- Changed to object constructor.
+- v0.1
+	- Initial release.
+
+## Known Issues
+
+- When using up/down arrows to scroll long drop-down menu, menu will not scroll to keep selected item in view.

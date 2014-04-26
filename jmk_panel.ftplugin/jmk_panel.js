@@ -1,8 +1,7 @@
 /* ------------------------------------------------------------- *
  * Panel Module for FoldingText 2.0 Plugins
  * by Jamie Kowalski, github.com/jamiekowalski/foldingtext-extra
- * Use of this code and associated files is permitted without restriction, provided
- * the above attribution and this statement are included in all copies of this code.
+ * Reuse permitted without restriction, provided this attribution is included
  * 
  * Usage:
  * 
@@ -25,6 +24,8 @@
  *   onEscape: function (event, panel) {},
  *   onCommand: function (event, panel) {}, // use event.which to determine which
  *                                          // key other than Command is pressed
+ *   onMenuSelect: function (even, panel, value) {},
+ *   spaceSelectsMenuItem: false,
  *   ignoreWhiteSpace: true,     // don't get changes in leading/trailing whitespace
  *   addToDOM: true
  * });
@@ -35,6 +36,8 @@ define(function(require, exports, module) {
   'use strict';
   
   var Extensions = require('ft/core/extensions'),
+    debug = false,
+    getCaretCoordinates = require('./textarea-caret-position/index.js').Coordinates,
     editor;          // this variable is assigned in the 'init' function below
     
   // Panel constructor; assigned to exports.Panel below
@@ -46,7 +49,9 @@ define(function(require, exports, module) {
       ESC = 27,
       KEY_A = 65,
       KEY_Z = 90,
-      debug = false,
+      KEY_SPACE = 32,
+      ARROW_UP = 38,
+      ARROW_DOWN = 40,
       no_op = function () {};    // no-op function to use as default
     
     // define default options
@@ -58,6 +63,8 @@ define(function(require, exports, module) {
       onReturn: no_op,
       onEscape: no_op,
       onCommand: no_op,
+      onMenuSelect: no_op,
+      spaceSelectsMenuItem: false,
       ignoreWhiteSpace: true,
       addToDOM: true
     }
@@ -75,8 +82,11 @@ define(function(require, exports, module) {
       }
     }
     
-    this.isShown = false;    // TODO hide this property
+    // TODO hide following properties
+    this._isShown = false;    
+    this._isMenuShown = false;
     this.currentValue = '';
+    this.currentMenuItems = [];
     
     // add unsettable properties
     Object.defineProperty(
@@ -105,8 +115,10 @@ define(function(require, exports, module) {
     
     // EVENTS
     
-    // when editor is clicked, etc.
-    this.input.addEventListener('blur', (function(event) {
+    // when editor is clicked
+    this.bodyClickListener = (function (event) {
+      if (debug) console.log('click triggered on body');
+      
       var performDefault;
       if (this.options.onBlur && this.options.onBlur !== no_op) {
         performDefault = this.options.onBlur(event, this);
@@ -114,8 +126,14 @@ define(function(require, exports, module) {
       if (performDefault !== false) {     // panel's default behavior
         this.hide(true);    // close the panel, keep contents
       }
-    }).bind(this));
 
+    }).bind(this);
+    
+    // prevent a click on the panel from closing it
+    this.element.addEventListener('mousedown', (function (event) {
+      event.stopPropagation();
+    }).bind(this));
+    
     // capture changes to input
     this.input.addEventListener('input', (function(event) {
       if (debug) console.log( 'input change event: \'' + this.input.value + '\'' );
@@ -139,22 +157,9 @@ define(function(require, exports, module) {
       }
         
     }).bind(this));
-    
-    // capture keyups (for command keys, etc.)
-    this.input.addEventListener('keyup', (function(event) {
-      if (debug) console.log('keyup: ' + event.which)
-      if (debug) console.log(this.keysDown)
-            
-      if (event.which === COMMAND_LEFT) {          // left command key
-        this.keysDown[COMMAND_LEFT] = false;
-      } else if (event.which === COMMAND_RIGHT) {  // right command key
-        this.keysDown[COMMAND_RIGHT] = false;
-      }
-      
-    }).bind(this))
-    
+        
     // capture keydowns (for command keys, etc.)
-    this.input.addEventListener('keydown', (function(event) {
+    this.element.addEventListener('keydown', (function(event) {
       if (debug) console.log('keydown: ' + event.which);
       
       if (event.which === RETURN) {                  // return key pressed
@@ -164,14 +169,16 @@ define(function(require, exports, module) {
           performDefault = this.options.onReturn(event, this);
         }
         if (performDefault !== false) {      // panel's default behavior
-          this.input.dispatchEvent(new CustomEvent('blur'))
+          this.hide(true);
           event.preventDefault();
         }
         
       } else if ( event.which === COMMAND_LEFT ) {     // command keys pressed
         this.keysDown[COMMAND_LEFT] = true;
+        
       } else if ( event.which === COMMAND_RIGHT ) {
         this.keysDown[COMMAND_RIGHT] = true;
+        
       } else if ( event.which === ESC ) {            // escape key pressed
         
         var performDefault;
@@ -188,7 +195,7 @@ define(function(require, exports, module) {
         
         var performDefault;
         if ( this.options.onCommand && this.options.onCommand !== no_op ) {
-          var performDefault = this.options.onCommand( event, this );
+          performDefault = this.options.onCommand( event, this );
         }
         if (performDefault !== false ) {
           if ( event.which === KEY_A ) {           // Command + A
@@ -202,8 +209,77 @@ define(function(require, exports, module) {
       }
     }).bind(this));
     
-    // Add panel to DOM
+    // capture keyups (for command keys, etc.)
+    this.input.addEventListener('keyup', (function(event) {
+      if (debug) console.log('keyup: ' + event.which)
+      if (debug) console.log(this.keysDown)
+            
+      if (event.which === COMMAND_LEFT) {          // left command key
+        this.keysDown[COMMAND_LEFT] = false;
+      } else if (event.which === COMMAND_RIGHT) {  // right command key
+        this.keysDown[COMMAND_RIGHT] = false;
+      }
+      
+    }).bind(this))
     
+    // menu keydown events; added to element in showMenu() method
+    // TODO also select item when space key is pressed?
+    this.menuOpenKeyDownListener = (function(event) {
+      
+      if ( event.which === ARROW_UP ) {
+        var active = this.menu.querySelector('li.' + this.data.menuActiveClass);
+        var item = active.previousSibling;
+        while (item && item.classList.contains(this.data.itemHiddenClass)) {
+          item = item.previousSibling;
+        }
+        if (item) {
+          active.classList.remove(this.data.menuActiveClass);
+          item.classList.add(this.data.menuActiveClass);
+        }
+        event.preventDefault();
+        event.stopPropagation();
+        
+      } else if ( event.which === ARROW_DOWN ) {
+        var active = this.menu.querySelector('li.' + this.data.menuActiveClass);
+        var item = active.nextSibling;
+        while (item && item.classList.contains(this.data.itemHiddenClass)) {
+          item = item.nextSibling;
+        }
+        if (item) {
+          active.classList.remove(this.data.menuActiveClass);
+          item.classList.add(this.data.menuActiveClass);          
+        }
+        event.preventDefault();
+        event.stopPropagation();
+        
+      } else if ( event.which === RETURN || 
+        (this.options.spaceSelectsMenuItem && event.which === KEY_SPACE) ) {
+        var active = this.menu.querySelector('li.' + this.data.menuActiveClass);
+        var value = '';
+        if (active) {
+          value = active.textContent;
+        }
+
+        var performDefault;
+        if ( this.options.onMenuSelect && this.options.onMenuSelect !== no_op ) {
+          performDefault = this.options.onMenuSelect( event, this, value );
+        }
+        
+        if (performDefault !== false) {
+          this.hideMenu();
+          event.preventDefault();
+          event.stopPropagation();
+        }
+        
+      } else if ( event.which === ESC ) {
+        this.hideMenu();
+        event.preventDefault();
+        event.stopPropagation();
+      }
+      
+    }).bind(this);
+    
+    // add panel to DOM    
     if ( this.options.addToDOM ) {
       document.body.insertBefore( this.element );
     }
@@ -211,11 +287,18 @@ define(function(require, exports, module) {
   
   Object.defineProperty( p.prototype, 'keysDown', { value: {} } );
   
+  Object.defineProperty( p.prototype, 'data', {
+    value: {
+      menuActiveClass: 'active',
+      itemHiddenClass: 'hidden'
+    }
+  });
+  
   p.prototype.addToDOM = function () {
     document.body.insertBefore( this.element );
   };
   p.prototype.show = function ( text, selection, selectionEnd ) {
-    if ( text || text === '' ) {
+    if ( (text && typeof text === 'string') || text === '' ) {
       this.input.value = text;
     }
     this.element.style.display = 'block';
@@ -232,7 +315,7 @@ define(function(require, exports, module) {
       var end = selectionEnd || selection;
       this.input.setSelectionRange(selection, end);
     } else if ( selection === 'preserve' ) {
-      // do nothing
+      // do nothing; yes, this is probably sloppy
     } else {
       this.input.select();          // select for other values
     }
@@ -240,7 +323,12 @@ define(function(require, exports, module) {
     if ( this.options.ignoreWhiteSpace ) {
       this.currentValue = this.input.value.trim();
     }
-    this.isShown = true;
+    
+    if (! this._isShown) { // make sure only adding listener once
+      window.document.body.addEventListener('mousedown', this.bodyClickListener);
+    }
+    
+    this._isShown = true;
   };
   p.prototype.hide = function ( keepContents ) {
     if ( ! keepContents === true ) {
@@ -249,12 +337,15 @@ define(function(require, exports, module) {
     if ( this.options.ignoreWhiteSpace ) {
       this.currentValue = this.input.value.trim();
     }
+    
+    window.document.body.removeEventListener('mousedown', this.bodyClickListener);
+    
     this.element.style.display = 'none';
     editor.focus();
-    this.isShown = false;
+    this._isShown = false;
   };
   p.prototype.toggle = function ( keepContents, text ) {
-    if ( this.isShown ) {
+    if ( this._isShown ) {
       this.hide( keepContents );
     } else {
       this.show( text );
@@ -270,6 +361,153 @@ define(function(require, exports, module) {
       return this.input.value;
     }
   };
+  
+  p.prototype.isShown = function () {
+    return this._isShown;
+  }
+  
+  p.prototype.showMenu = function (query, items) {
+    
+    if (items && ! (items instanceof Array && (items[0] instanceof String || 
+      typeof items[0] === 'string') )) {
+      
+      console.log("Items argument must be array of strings.")
+      return;
+    }
+
+    // create menu if doesn't exist
+    if (! this.menu) {
+      Object.defineProperty(
+        this,
+        'menu',
+        { value: document.createElement('ul') }
+      );
+      this.menu.style.display = 'none';
+      this.menu.style.position = 'absolute';
+      this.element.appendChild(this.menu);
+            
+      this.menu.addEventListener('mousedown', (function (event) {
+        if (debug) console.log('mousedown triggered on menu');
+        
+        var value = event.target.textContent;
+
+        var performDefault;
+        if ( this.options.onMenuSelect /* && this.options.onMenuSelect !== no_op */ ) {
+          performDefault = this.options.onMenuSelect( event, this, value );
+        }
+      
+        if (performDefault !== false) {
+          this.input.focus();
+          this.hideMenu();
+          event.preventDefault();
+        }
+
+      }).bind(this));
+      
+      this.menu.addEventListener('mouseover', (function (event) {
+        if (debug) console.log(event.target);
+        
+        var active = this.menu.querySelector('li.' + this.data.menuActiveClass);
+        
+        if (event.target.parentNode && event.target.parentNode === this.menu && 
+          ! event.target.classList.contains(this.data.itemHiddenClass) ) {
+          // TODO assumes that parentNode of the item is the menu!
+          
+          if (active) {
+            active.classList.remove(this.data.menuActiveClass);
+          }
+          event.target.classList.add(this.data.menuActiveClass);
+        }
+        
+      }).bind(this));
+      
+    }
+    
+    // clear and re-populate menu
+    if (items && items !== this.currentMenuItems) { // only if items array different
+      if (debug) console.log('New set of menu items: ' + items);
+      
+      while (this.menu.hasChildNodes()) {
+          this.menu.removeChild(this.menu.lastChild);
+      }
+      for (var i = 0; i < items.length; i++) {
+        var li = document.createElement('li');
+        li.textContent = items[i];
+        this.menu.appendChild(li);
+      }
+      
+      this.currentMenuItems = items;
+    }
+
+    var refreshMenu = (function (query) {
+      var active = this.menu.querySelector('li.' + this.data.menuActiveClass);
+      if (active) {
+        active.classList.remove(this.data.menuActiveClass);
+      }
+    
+      // remove and add 'hidden' class
+      var li = this.menu.firstChild;
+      var count = 0;
+      while (li) {
+        li.classList.remove(this.data.itemHiddenClass);
+        if (! li.textContent.match(query) ) {
+          li.classList.add(this.data.itemHiddenClass);
+        } else {
+          count++;
+        }
+        li = li.nextSibling;
+      }
+      
+      if (count === 0) {
+        // FIXME what should I do here?
+      }
+    
+      // highlight first menu item
+      li = this.menu.firstChild;
+      while (li && li.classList.contains(this.data.itemHiddenClass)) {
+        li = li.nextSibling;
+      }
+      if (li) {
+        li.classList.add(this.data.menuActiveClass);
+      }
+    }).bind(this);
+  
+    refreshMenu(query);
+    
+    // add event listeners
+    if (! this._isMenuShown) { // ensure that listener is added only once
+      this.input.addEventListener('keydown', this.menuOpenKeyDownListener);
+    }
+    
+    // TODO changing menu position should be optional
+    var coordinates = getCaretCoordinates(this.input, this.input.selectionEnd);
+    if (! this._isMenuShown) { // don't move menu if it's already shown
+      this.menu.style.left = coordinates.left + 'px';
+    }
+    
+    this.menu.style.display = 'block';
+    this._isMenuShown = true;
+    
+  };
+  
+  p.prototype.hideMenu = function () {
+    if (this._isMenuShown === false) {
+      return;
+    }
+    
+    if (this.menu) {
+      this.menu.style.display = 'none';
+    }
+    if (this.menuOpenKeyDownListener) {
+      this.input.removeEventListener('keydown', this.menuOpenKeyDownListener);
+    }
+    
+    this._isMenuShown = false;
+  };
+  
+  p.prototype.isMenuShown = function () {
+    return this._isMenuShown;
+  }
 
   Extensions.add('com.foldingtext.editor.init', function( ed ) {
     editor = ed;

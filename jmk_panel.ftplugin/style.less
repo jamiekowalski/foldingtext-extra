@@ -1,26 +1,58 @@
+/* ------------------------------------------------------------- *
+ * Panel Module for FoldingText 2.0 Plugins
+ * by Jamie Kowalski, github.com/jamiekowalski/foldingtext-extra
+ * Reuse permitted without restriction, provided this attribution is included
+ * ------------------------------------------------------------- */
+
 @panel-width: 250px;
 @panel-height: 1.9rem;
 
 .JKPanel {
-    position: fixed;
-    z-index: 10;
-    left: 25px;
-    top: 8px;
-    width: @panel-width;
-    height: @panel-height;
-    background-color: white;
-    border-radius: 6px;
-    box-shadow: 1px 3px 10px #999;
+  position: fixed;
+  z-index: 10;
+  left: 25px;
+  top: 8px;
+  width: @panel-width;
+  height: @panel-height;
+  background-color: white;
+  border-radius: 6px;
+  box-shadow: 1px 3px 10px #999;
 }
 .JKPanel input {
-    margin: 5px 10px;
-    width: @panel-width - 20px;
-    height: @panel-height - 10px;
-    background: inherit;
-    border: none;
-    font-size: 1em;
-    font-family: inherit;
+  margin: 5px 10px;
+  width: @panel-width - 20px;
+  height: @panel-height - 10px;
+  background: inherit;
+  border: none;
+  font-size: 1em;
+  font-family: inherit;
 }
 .JKPanel input:focus {
-    outline-width: 0;
+  outline-width: 0;
+}
+.JKPanel ul {
+  position: absolute;
+  background-color: inherit;
+  border-top: 1px solid #bbb;
+  box-shadow: 1px 7px 8px #aaa;
+  border-radius: 0 0 6px 6px;
+  list-style: none;
+  margin: 0;
+  padding: 0em;
+  top: @panel-height;
+  left: 8px;
+  min-width: 80px;
+  max-height: 700px;
+  overflow: scroll;
+}
+.JKPanel li {
+  padding: 0.2em 2em 0.2em 0.4em;
+  cursor: default;
+}
+.JKPanel li.hidden {
+  display: none;
+}
+.JKPanel li.active {
+  background-color: #696DB6;
+  color: white;
 }

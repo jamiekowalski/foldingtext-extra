@@ -14,6 +14,11 @@ define(function(require, exports, module) {
       headingType,
       prevNodePath,
       prevSelectedRange,
+      tags,
+      // tag regexs adapted from Jesse Grosjean's ft/taxonomy/helpers/tagshelper.js
+      tagStartChars = '[A-Z_a-z\\u00C0-\\u00D6\\u00D8-\\u00F6\\u00F8-\\u02FF\\u0370-\\u037D\\u037F-\\u1FFF\\u200C-\\u200D\\u2070-\\u218F\\u2C00-\\u2FEF\\u3001-\\uD7FF\\uF900-\\uFDCF\\uFDF0-\\uFFFD]',
+      tagWordChars =  '[\\-.0-9\\u00B7\\u0300-\\u036F\\u203F-\\u2040]',
+      tagRegexString = '@((?:' + tagStartChars + '(?:' + tagStartChars + '|' + tagWordChars + ')*)?)',
       debug = false
   
   // TODO check support for quote-wrapped terms
@@ -190,10 +195,13 @@ define(function(require, exports, module) {
     }
   }
   
-  function showFilterPanel() {
+  function showFilterPanel( text, selection, selectionEnd ) {
     prevNodePath = editor.nodePath();
     prevSelectedRange = editor.selectedRange();
-    panel.show();
+    
+    tags = editor.tree().tags(true); // get tags without internal, i.e. 'name'
+    
+    panel.show( text, selection, selectionEnd );
   }
   
   function hideFilterPanel(panelEle, input) {
@@ -211,6 +219,14 @@ define(function(require, exports, module) {
     performCommand: showFilterPanel
   });
   
+	Extensions.add('com.foldingtext.editor.commands', {
+		name: 'jk filter tag',
+    performCommand: function() {
+      showFilterPanel('@', 'end');
+      panel.input.dispatchEvent(new CustomEvent('input')); // TODO hack
+    }
+  });
+  
   Extensions.add('com.foldingtext.editor.init', function(ed) {
     editor = ed;             // TODO This is a hack
     if (editor.tree().taxonomy.name === 'markdown') {
@@ -218,7 +234,7 @@ define(function(require, exports, module) {
     } else {
       headingType = 'project'
     }
-    
+        
     panel = new Panel({
       placeholder: 'enter expression...',
       onReturn: function() {
@@ -228,8 +244,36 @@ define(function(require, exports, module) {
         hideFilterPanel();
       },
       onTextChange: function() {
+        var cursorPos = panel.input.selectionEnd; // WARNING: doesn't support IE
+        
+        var tagMatch = panel.input.value.substring(0, cursorPos).match(new RegExp(tagRegexString + '$')); // TODO also match non-Latin
+        if (tagMatch) {
+          var query = new RegExp('(^|_)' + tagMatch[1]);
+          panel.showMenu(query, tags); // panel automatically decides when to build
+                                       // menu, and when to simply filter
+          
+        } else {
+          panel.hideMenu(); // TODO this will almost always be pointless
+          filterByPath(parsePath(panel.input.value)); 
+        }
+      },
+      onMenuSelect: function (event, panel, value) {
+        var cursorPos = panel.input.selectionEnd; // WARNING: doesn't support IE
+        var start = '';
+
+        if (value) {          
+          start = panel.input.value.substring(0, cursorPos).
+            replace(new RegExp(tagRegexString + '$'), '@' + value + ' ');
+        } else {
+          start = panel.input.value.substring(0, cursorPos) + ' ';
+        }
+        panel.input.value = start + panel.input.value.substring(cursorPos);
+        panel.input.setSelectionRange(start.length, start.length);
+        
         filterByPath(parsePath(panel.input.value));
-      }
+      },
+      spaceSelectsMenuItem: true,
+      ignoreWhiteSpace: false
     })
     
     editor.addKeyMap({

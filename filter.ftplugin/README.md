@@ -18,22 +18,13 @@ Download the [ZIP of this repository](https://github.com/jamiekowalski/foldingte
 
 Important: this plugin requires `jmk_panel.ftplugin`.
 
-## Change log
-
-- 0.3
-	- jmkpanel.js now uses a constructor function and is more configurable, for ease of using it in other plugins. See the file header for details.
-- 0.2
-	- Dismissing the panel with `Escape` returns document view and selection to state before opening panel; this makes it easy to quickly view different queries, then return directly back to where you were. Press `Return` or click within the document to dismiss the pane and keep the newly queried view.
-- 0.1
-	- Initial release.
-
 ## Examples of expressions:
 
 `@important`
-: items tagged @important. Note that tag matches must be exact; `@im` will not match an item tagged `@important`. This is in contrast to text matches.
+: items tagged @important . Note that tag matches must be exact; `@im` will not match an item tagged `@important`. This is in contrast to text matches.
 
 `not @done`
-: items not tagged @done. Note that currently, if an item is tagged @done but has subitems, it will not be hidden.
+: items not tagged @done . Note that currently, if an item is tagged @done but has subitems, it will not be hidden.
 
 `;misc`
 : headings that contain the text 'misc'
@@ -97,6 +88,18 @@ any expression starting or ending with `*`
 any expression starting with `/`
 : use FoldingText's full XPath syntax instead of the modified syntax described here. See documentation on the [FoldingText website](http://www.foldingtext.com/sdk/nodepaths/).
 
+## Change log
+
+- 0.4
+	- Added tag drop-down menu when ‘@’ (currently only when at end of input).
+	- Added `jmk filter tag` command to bring up filter panel with ‘@’ entered.
+- 0.3
+	- jmkpanel.js now uses a constructor function and is more configurable, for ease of using it in other plugins. See the file header for details.
+- 0.2
+	- Dismissing the panel with `Escape` returns document view and selection to state before opening panel; this makes it easy to quickly view different queries, then return directly back to where you were. Press `Return` or click within the document to dismiss the pane and keep the newly queried view.
+- 0.1
+	- Initial release.
+
 ## Known Issues
 
 - If the extension is triggered, and without releasing the Command key, Command+A or Command+Z is pressed, these commands act on the editor.
@@ -108,4 +111,3 @@ any expression starting with `/`
 
 - Use new query to combine with current view: union, intersect, or not.
 - Save named queries.
-- Display a list of tags when a `@` is typed.
