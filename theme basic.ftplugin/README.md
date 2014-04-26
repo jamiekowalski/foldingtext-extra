@@ -12,4 +12,4 @@ Features:
 
 Requires [FoldingText 2.0](http://support.foldingtext.com/discussions/development-versions/)
 
-![Theme Screenshot](https://raw.github.com/jamiekowalski/foldingtext-extra/master/theme%20basic.ftplugin/assets/theme_screenshot.png)
+![Theme Screenshot](assets/theme_screenshot.png?raw=true)
