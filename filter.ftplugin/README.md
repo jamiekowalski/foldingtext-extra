@@ -91,7 +91,7 @@ any expression starting with `/`
 ## Change log
 
 - 0.4
-	- Added tag drop-down menu when ‘@’ (currently only when at end of input).
+	- Added tag drop-down menu when ‘@’ is entered.
 	- Added `jmk filter tag` command to bring up filter panel with ‘@’ entered.
 - 0.3
 	- jmkpanel.js now uses a constructor function and is more configurable, for ease of using it in other plugins. See the file header for details.
