@@ -2,7 +2,7 @@
 
 By [Jamie Kowalski](https://github.com/jamiekowalski)
 
-![Filter plugin screenshot](filter_screenshot.png?raw=true)
+![Filter plugin screenshot](filter_screenshot.png?raw=true =292x170)
 
 Filters a FoldingText document based on an expression given in a simple syntax. For example, the expression `;writ/fiction/@todo` will show only items tagged @todo that are under an item containing the text 'fiction' that is under an heading with the text 'writ' (including partial word matches, so ‘writing’ would be matched).
 
