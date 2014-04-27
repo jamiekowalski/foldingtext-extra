@@ -19,6 +19,9 @@ define(function(require, exports, module) {
       tagStartChars = '[A-Z_a-z\\u00C0-\\u00D6\\u00D8-\\u00F6\\u00F8-\\u02FF\\u0370-\\u037D\\u037F-\\u1FFF\\u200C-\\u200D\\u2070-\\u218F\\u2C00-\\u2FEF\\u3001-\\uD7FF\\uF900-\\uFDCF\\uFDF0-\\uFFFD]',
       tagWordChars =  '[\\-.0-9\\u00B7\\u0300-\\u036F\\u203F-\\u2040]',
       tagRegexString = '@((?:' + tagStartChars + '(?:' + tagStartChars + '|' + tagWordChars + ')*)?)',
+      selectionBug = false,
+      selectionBugFirstChar,
+      selectionBugDetermined = false,
       debug = false
   
   // TODO check support for quote-wrapped terms
@@ -213,34 +216,11 @@ define(function(require, exports, module) {
     }
     panel.hide(false);
   }
-  
-  function webkitVersion() {
-    var version = [0];
-    var regexp = /(?:safari|webkit)\/([\d\.]+)/i;
-    var result = navigator.userAgent.match(regexp);
-    if (result) {
-      version = result[1].split('.');
-      version.forEach(function (item, i, array) {
-        array[i] = parseInt(item);
-      });
-    }
-    return version;
-  }
-  
-  function macOSXVersion() {
-    var version = 0;
-    var regexp = /Mac OS X 10_(\d+_\d+)/i;
-    var result = navigator.userAgent.match(regexp);
-    if (result) {
-      version = parseFloat(result[1].replace(/_/g, '.'));
-    }
-    return version;
-  }
-  
+    
   function selectionBugWorkaround(position, inputValue) {
     var newPosition = position;
     
-    if (macOSXVersion() < 9.0) {
+    if (selectionBug) {
       // prior to 10.9, selectionEnd is 1 less than it should be, but only after
       // the first character has been entered in the input. I.e. it's 1, 1, 2...
       if (! inputValue.match(/^.(\s|$)/)) { // TODO will not always work
@@ -282,6 +262,19 @@ define(function(require, exports, module) {
       },
       onTextChange: function() {
         var cursorPos = panel.input.selectionEnd; // WARNING: doesn't support IE
+        if (! selectionBugDetermined) {
+          if (panel.input.value.length === 1) {
+            selectionBugFirstChar = panel.input.value;
+          } else if (panel.input.value.length === 2) {
+            if (panel.input.value.charAt(0) === selectionBugFirstChar 
+              && cursorPos === 1) {
+                // could give false positive in this case:
+                // enter char 'a', move cursor back and enter same letter
+                selectionBug = true;
+            }
+            selectionBugDetermined = true;
+          }
+        }
         cursorPos = selectionBugWorkaround(cursorPos, panel.input.value);
         
         var tagMatch = panel.input.value.substring(0, cursorPos).match(new RegExp(tagRegexString + '$')); // TODO also match non-Latin
