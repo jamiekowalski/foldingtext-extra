@@ -213,6 +213,43 @@ define(function(require, exports, module) {
     }
     panel.hide(false);
   }
+  
+  function webkitVersion() {
+    var version = [0];
+    var regexp = /(?:safari|webkit)\/([\d\.]+)/i;
+    var result = navigator.userAgent.match(regexp);
+    if (result) {
+      version = result[1].split('.');
+      version.forEach(function (item, i, array) {
+        array[i] = parseInt(item);
+      });
+    }
+    return version;
+  }
+  
+  function macOSXVersion() {
+    var version = 0;
+    var regexp = /Mac OS X 10_(\d+_\d+)/i;
+    var result = navigator.userAgent.match(regexp);
+    if (result) {
+      version = parseFloat(result[1].replace(/_/g, '.'));
+    }
+    return version;
+  }
+  
+  function selectionBugWorkaround(position, inputValue) {
+    var newPosition = position;
+    
+    if (macOSXVersion() < 9.0) {
+      // prior to 10.9, selectionEnd is 1 less than it should be, but only after
+      // the first character has been entered in the input. I.e. it's 1, 1, 2...
+      if (! inputValue.match(/^.(\s|$)/)) { // TODO will not always work
+        newPosition = newPosition + 1;
+      }
+    }
+    
+    return newPosition;
+  }
     
 	Extensions.add('com.foldingtext.editor.commands', {
 		name: 'jk filter',
@@ -245,10 +282,11 @@ define(function(require, exports, module) {
       },
       onTextChange: function() {
         var cursorPos = panel.input.selectionEnd; // WARNING: doesn't support IE
+        cursorPos = selectionBugWorkaround(cursorPos, panel.input.value);
         
         var tagMatch = panel.input.value.substring(0, cursorPos).match(new RegExp(tagRegexString + '$')); // TODO also match non-Latin
         if (tagMatch) {
-          var query = new RegExp('(^|_)' + tagMatch[1]);
+          var query = new RegExp('(^|_)' + tagMatch[1], 'i');
           panel.showMenu(query, tags); // panel automatically decides when to build
                                        // menu, and when to simply filter
           
@@ -259,6 +297,8 @@ define(function(require, exports, module) {
       },
       onMenuSelect: function (event, panel, value) {
         var cursorPos = panel.input.selectionEnd; // WARNING: doesn't support IE
+        cursorPos = selectionBugWorkaround(cursorPos, panel.input.value);
+        
         var start = '';
 
         if (value) {          
