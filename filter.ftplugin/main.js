@@ -225,7 +225,7 @@ define(function(require, exports, module) {
     prevNodePath = editor.nodePath();
     prevSelectedRange = editor.selectedRange();
     
-    tags = editor.tree().tags(true); // get tags without internal, i.e. 'name'
+    tags = editor.tree().tags(true).sort(); // get tags without internal, i.e. 'name'
     
     panel.show( text, selection, selectionEnd );
   }
