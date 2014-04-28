@@ -84,7 +84,7 @@ Add `/` at end to also reveal `job : developer`
 `age>30`, `age<20`, `age>=25`
 : items that have the property “age” with values < 30, etc.
 
-any expression starting or ending with `*`
+any expression starting or ending with `|`
 : don't show ancestors
 
 any expression starting with `/`
@@ -92,6 +92,9 @@ any expression starting with `/`
 
 ## Change log
 
+- 0.4.1
+	- Partial workaround for cursor position bug in Mountain Lion (in jmk_panel).
+	- Experimental feature: start query with `+`, `*`, or `-` for union, intersect, except operation (respectively) with current view. For performance reasons, cannot chain. No ancestors option has been changed to `|`.
 - 0.4
 	- Added tag drop-down menu when ‘@’ is entered.
 	- Added `jmk filter tag` command to bring up filter panel with ‘@’ entered.

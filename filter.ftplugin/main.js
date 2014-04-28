@@ -8,7 +8,7 @@ define(function(require, exports, module) {
   
   var Extensions = require('ft/core/extensions'),
       NodePath = require('ft/core/nodepath').NodePath,
-			Panel = require('../jmk_panel.ftplugin/jmk_panel.js').Panel,
+      Panel = require('../jmk_panel.ftplugin/jmk_panel.js').Panel,
       editor,         // this variable is assigned in the 'init' function below
       panel,
       headingType,
@@ -22,7 +22,7 @@ define(function(require, exports, module) {
       selectionBug = false,
       selectionBugFirstChar,
       selectionBugDetermined = false,
-      debug = false
+      debug = true
   
   // TODO check support for quote-wrapped terms
   // TODO automatically enclose terms that don't match \w+ with quotes
@@ -122,25 +122,36 @@ define(function(require, exports, module) {
     var input = input.trim(),
         delim = '/',
         heading_marker = ';',
-        ancestors_off = '*', // can be at start or end
+        // NOTE: following must be regex escaped!
+        ancestors_off = '\\|',    // can be at start or end
+        union_marker = '\\+',     // start only
+        intersect_marker = '\\*', // start only
+        except_marker = '\\-',    // start only
         ancestors,
         descendants
   
     if (! input) {
-      return input
-    } else if (input.charAt(0) === '/') {
+      return input;
+    } else if (input.match(/\(*\//)) {
       // assume full XPath; leave it alone
-      return input
+      return input;
     }
     
     // set ancestors option
     ancestors = true;
-    if (input.charAt(0) === ancestors_off) {
-      ancestors = false
-      input = input.slice(1)
+    var start_ops = input.match(new RegExp('^[' + except_marker + ancestors_off + 
+      union_marker + intersect_marker + ']*', 'i'));
+    if (start_ops) {
+      start_ops = start_ops[0];
+      input = input.substring(start_ops.length);
+      
+      if (start_ops.match(new RegExp(ancestors_off, 'i')) ) {
+        ancestors = false
+      }
     }
+    
     // allow ancestor toggle at end of input
-    if (input.charAt(input.length - 1) === ancestors_off) {
+    if (input.match(ancestors_off + '$')) {
       ancestors = false;
       input = input.substring(0, input.length - 1); // or input.slice(0, -1);
     }
@@ -177,8 +188,20 @@ define(function(require, exports, module) {
     if (ancestors) {
       path += '/ancestor-or-self::*'
     }
+    
+    // set operations
+    // TODO experimental
+    if (! prevNodePath.nodePathString.match(/union|intersect|except/)) {
+      if (start_ops.match(new RegExp(union_marker, 'i'))) {
+        path = '(' + prevNodePath.nodePathString + ') union (' + path + ')';
+      } else if (start_ops.match(new RegExp(intersect_marker, 'i'))) {
+        path = '(' + prevNodePath.nodePathString + ') intersect (' + path + ')';
+      } else if (start_ops.match(new RegExp(except_marker, 'i'))) {
+        path = '(' + prevNodePath.nodePathString + ') except (' + path + ')';
+      }
+    }
   
-    return path
+    return path;
   }
   
   function filterByPath(path) {
@@ -217,27 +240,13 @@ define(function(require, exports, module) {
     panel.hide(false);
   }
     
-  function selectionBugWorkaround(position, inputValue) {
-    var newPosition = position;
-    
-    if (selectionBug) {
-      // prior to 10.9, selectionEnd is 1 less than it should be, but only after
-      // the first character has been entered in the input. I.e. it's 1, 1, 2...
-      if (! inputValue.match(/^.(\s|$)/)) { // TODO will not always work
-        newPosition = newPosition + 1;
-      }
-    }
-    
-    return newPosition;
-  }
-    
-	Extensions.add('com.foldingtext.editor.commands', {
-		name: 'jk filter',
+  Extensions.add('com.foldingtext.editor.commands', {
+    name: 'show filter panel',
     performCommand: showFilterPanel
   });
   
-	Extensions.add('com.foldingtext.editor.commands', {
-		name: 'jk filter tag',
+  Extensions.add('com.foldingtext.editor.commands', {
+    name: 'show filter panel with tags',
     performCommand: function() {
       showFilterPanel('@', 'end');
       panel.input.dispatchEvent(new CustomEvent('input')); // TODO hack
@@ -260,24 +269,10 @@ define(function(require, exports, module) {
       onEscape: function() {
         hideFilterPanel();
       },
-      onTextChange: function() {
-        var cursorPos = panel.input.selectionEnd; // WARNING: doesn't support IE
-        if (! selectionBugDetermined) {
-          if (panel.input.value.length === 1) {
-            selectionBugFirstChar = panel.input.value;
-          } else if (panel.input.value.length === 2) {
-            if (panel.input.value.charAt(0) === selectionBugFirstChar 
-              && cursorPos === 1) {
-                // could give false positive in this case:
-                // enter char 'a', move cursor back and enter same letter
-                selectionBug = true;
-            }
-            selectionBugDetermined = true;
-          }
-        }
-        cursorPos = selectionBugWorkaround(cursorPos, panel.input.value);
-        
-        var tagMatch = panel.input.value.substring(0, cursorPos).match(new RegExp(tagRegexString + '$')); // TODO also match non-Latin
+      onTextChange: function(event) {
+        var cursorPos = panel.selection(event)[1];
+    
+        var tagMatch = panel.input.value.substring(0, cursorPos).match(new RegExp(tagRegexString + '$'));
         if (tagMatch) {
           var query = new RegExp('(^|_)' + tagMatch[1], 'i');
           panel.showMenu(query, tags); // panel automatically decides when to build
@@ -289,8 +284,7 @@ define(function(require, exports, module) {
         }
       },
       onMenuSelect: function (event, panel, value) {
-        var cursorPos = panel.input.selectionEnd; // WARNING: doesn't support IE
-        cursorPos = selectionBugWorkaround(cursorPos, panel.input.value);
+        var cursorPos = panel.selection()[1];
         
         var start = '';
 
@@ -300,9 +294,10 @@ define(function(require, exports, module) {
         } else {
           start = panel.input.value.substring(0, cursorPos) + ' ';
         }
+        
         panel.input.value = start + panel.input.value.substring(cursorPos);
         panel.input.setSelectionRange(start.length, start.length);
-        
+
         filterByPath(parsePath(panel.input.value));
       },
       spaceSelectsMenuItem: true,
@@ -310,7 +305,7 @@ define(function(require, exports, module) {
     })
     
     editor.addKeyMap({
-      "Shift-Cmd-'" : showFilterPanel
+      "Shift-Cmd-'" : 'show filter panel'
       
       /* Info about keyboard shortcuts
        * from http://codemirror.net/doc/manual.html#keymaps

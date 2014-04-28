@@ -87,12 +87,14 @@ panel.input — the text `<input>` element of the panel.
 
 ## Change Log
 
-- v0.4
+- 0.4.1
+	- Partial workaround for cursor position bug in Mountain Lion.
+- 0.4
 	- Added drop-down menu. Changes should be backwards-compatible.
-- v0.3
+- 0.3
 	- Module separaged from filter.ftplugin
 	- Changed to object constructor.
-- v0.1
+- 0.1
 	- Initial release.
 
 ## Known Issues

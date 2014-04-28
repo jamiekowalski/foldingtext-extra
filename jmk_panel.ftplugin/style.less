@@ -16,7 +16,7 @@
   height: @panel-height;
   background-color: white;
   border-radius: 6px;
-  box-shadow: 1px 3px 10px #999;
+  box-shadow: 1px 3px 10px rgba(0,0,0,0.5);
 }
 .JKPanel input {
   margin: 5px 10px;
@@ -34,16 +34,17 @@
   position: absolute;
   background-color: inherit;
   border-top: 1px solid #bbb;
-  box-shadow: 1px 7px 8px #aaa;
+  box-shadow: 1px 7px 8px rgba(0,0,0,0.3);
   border-radius: 0 0 6px 6px;
   list-style: none;
   margin: 0;
   padding: 0em;
+  padding-bottom: 0.4em;
   top: @panel-height;
   left: 8px;
   min-width: 80px;
   max-height: 700px;
-  overflow: scroll;
+  overflow-y: auto;
 }
 .JKPanel li {
   padding: 0.2em 2em 0.2em 0.4em;

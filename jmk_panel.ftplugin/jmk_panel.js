@@ -38,6 +38,11 @@ define(function(require, exports, module) {
   var Extensions = require('ft/core/extensions'),
     debug = false,
     getCaretCoordinates = require('./textarea-caret-position/index.js').Coordinates,
+    selectionBug = {
+      exists: false,
+      determined: false,
+      firstChar: undefined
+    },
     editor;          // this variable is assigned in the 'init' function below
     
   // Panel constructor; assigned to exports.Panel below
@@ -137,6 +142,21 @@ define(function(require, exports, module) {
     // capture changes to input
     this.input.addEventListener('input', (function(event) {
       if (debug) console.log( 'input change event: \'' + this.input.value + '\'' );
+      
+	  if (! selectionBug.determined) {
+		  if (this.input.value.length === 1) {
+			selectionBug.firstChar = this.input.value;
+		  } else if (this.input.value.length === 2) {
+			if (this.input.value.charAt(0) === selectionBug.firstChar 
+			  && this.input.selectionStart === 1) {
+				// could give false positive in this case:
+				// enter char 'a', move cursor back and enter same letter
+				selectionBug.exists = true;
+			}
+			selectionBug.determined = true;
+		  }
+		}
+      
       
       if (this.options.ignoreWhiteSpace) {
         if ( this.input.value.trim() === this.currentValue ) {
@@ -423,8 +443,23 @@ define(function(require, exports, module) {
       
     }
     
+    // check whether items are different
+    var different = false;
+    if (! items) {
+    	// do nothing
+    } else if (items.length !== this.currentMenuItems.length) {
+    	different = true;
+	} else {
+		for (var i = 0; i < items.length; i++) {
+			if (items[i] !== this.currentMenuItems[i]) {
+				different = true;
+				break;
+			}
+		}
+    }
+    
     // clear and re-populate menu
-    if (items && items !== this.currentMenuItems) { // only if items array different
+    if (different) { // only if items array different
       if (debug) console.log('New set of menu items: ' + items);
       
       while (this.menu.hasChildNodes()) {
@@ -458,10 +493,6 @@ define(function(require, exports, module) {
         li = li.nextSibling;
       }
       
-      if (count === 0) {
-        // FIXME what should I do here?
-      }
-    
       // highlight first menu item
       li = this.menu.firstChild;
       while (li && li.classList.contains(this.data.itemHiddenClass)) {
@@ -470,9 +501,16 @@ define(function(require, exports, module) {
       if (li) {
         li.classList.add(this.data.menuActiveClass);
       }
+      
+      return count;
+      
     }).bind(this);
   
-    refreshMenu(query);
+    var count = refreshMenu(query);
+    if (count === 0) {
+      this.hideMenu();
+      return;
+    }
     
     // add event listeners
     if (! this._isMenuShown) { // ensure that listener is added only once
@@ -507,6 +545,35 @@ define(function(require, exports, module) {
   
   p.prototype.isMenuShown = function () {
     return this._isMenuShown;
+  };
+  
+  p.prototype.selection = function (event) {
+  
+    var selectionStart = this.input.selectionStart; // WARNING: doesn't support IE
+    var selectionEnd = this.input.selectionEnd;
+
+	if (event && event.type === 'input') {
+	    // the bug only occurs during the 'input' event. During 'keydown' input has not 
+	    // changed; during 'keyup' input has changed and selection has been updated; but
+	    // during 'input', input has changed and (in Mountain Lion), selection in many
+	    // cases has *not* been updated.
+	  
+		if (selectionBug.exists) {
+		  // prior to 10.9, selectionEnd is 1 less than it should be, but only after
+		  // the first character has been entered in the input. I.e. it's 1, 1, 2...
+		  // if there 
+		  if (! this.input.value.match(/^.?$/)) { // TODO heuristic; will not always work
+			if (selectionStart !== 0) {
+				selectionStart = selectionStart + 1;
+			}
+			if (selectionEnd !== 0) {
+			  selectionEnd = selectionEnd + 1;
+			}
+		  }
+		}
+    }
+    
+    return [selectionStart, selectionEnd];
   }
 
   Extensions.add('com.foldingtext.editor.init', function( ed ) {
