@@ -22,7 +22,7 @@ define(function(require, exports, module) {
       selectionBug = false,
       selectionBugFirstChar,
       selectionBugDetermined = false,
-      debug = true
+      debug = false
   
   // TODO check support for quote-wrapped terms
   // TODO automatically enclose terms that don't match \w+ with quotes
@@ -132,7 +132,7 @@ define(function(require, exports, module) {
   
     if (! input) {
       return input;
-    } else if (input.match(/\(*\//)) {
+    } else if (input.match(/^\(*\//)) {
       // assume full XPath; leave it alone
       return input;
     }
