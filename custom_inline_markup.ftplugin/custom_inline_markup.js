@@ -5,7 +5,7 @@
  * 
  * To use:
  * 
- * var addMarkup = require('./custom_inline.js').addMarkup;
+ * var addMarkup = require('./custom_inline_markup.js').addMarkup;
  * addMarkup( {start:'{', end:'}', attr:'comment', syntaxAttr:'custom-keyword'} );
  *
  * For each markup definition, required properties are 'start' and 'attr'. 

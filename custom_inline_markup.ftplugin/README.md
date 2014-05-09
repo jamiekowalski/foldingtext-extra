@@ -10,7 +10,7 @@ Requires [FoldingText 2.0](http://support.foldingtext.com/discussions/developmen
 
 ## Usage
 
-    var addMarkup = require('./custom_inline.js').addMarkup;
+    var addMarkup = require('./custom_inline_markup.js').addMarkup; // relative path to plugin file
     addMarkup( {start:'{', end:'}', attr:'comment', syntaxAttr:'custom-keyword'} );
 
 For each markup definition, required properties are `start` and `attr`. `attr` is used as a class (prefixed with 'cm-') for the entire span of the inline markup. `syntaxAttr` is used as a class (prefixed with 'cm-') for the start and end syntax; defaults to 'keyword'.
