@@ -287,12 +287,17 @@ define(function(require, exports, module) {
         var cursorPos = panel.selection()[1];
         
         var start = '';
+        var postfix = '';
+        
+        if (event.which === 32) {  // space key was used to select item
+          postfix = ' ';
+        }
 
         if (value) {          
           start = panel.input.value.substring(0, cursorPos).
-            replace(new RegExp(tagRegexString + '$'), '@' + value + ' ');
+            replace(new RegExp(tagRegexString + '$'), '@' + value + postfix);
         } else {
-          start = panel.input.value.substring(0, cursorPos) + ' ';
+          start = panel.input.value.substring(0, cursorPos) + postfix; // TODO what case is this for?
         }
         
         panel.input.value = start + panel.input.value.substring(cursorPos);
