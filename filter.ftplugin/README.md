@@ -22,73 +22,30 @@ Important: this plugin requires `jmk_panel.ftplugin`.
 
 ## Examples of expressions:
 
-`@important`
-: items tagged @important . Note that tag matches must be exact; `@im` will not match an item tagged `@important`. This is in contrast to text matches.
+- `@important` : items tagged @important . Note that tag matches must be exact; `@im` will not match an item tagged `@important`. This is in contrast to text matches.
+- `not @done` : items not tagged @done . Note that currently, if an item is tagged @done but has subitems, it will not be hidden.
+- `;misc` : headings that contain the text 'misc'
+- `;misc items` : headings that contain both 'misc' and 'items'
+- `;misc or items` : headings that contain either 'misc' or 'items'
+- `misc/today tomorrow` : items that contain both 'today' and 'tomorrow under an item that contains 'misc'.
+- `;code;fold text` : heading that contains both 'fold' and 'text' under a heading that contains 'code'.
+- `yesterday today and tomorrow` : items that contains 'yesterday' and 'today' and 'tomorrow'. When only one boolean operator is used with three or more terms, this operator is used as the default.
+- `yesterday or today and tomorrow` : items that contains 'yesterday' and 'today' and 'tomorrow'. When a mix of 'and' and 'or' is used, 'or's are changed to 'and'.
+- any expression ending with `/` : show descendants (descendants are always shown if the last segment in the expression is a heading)
+- `#cm` : items that contain a Critic Markup comment/annotation
+- `#hl` : items that contain a Critic Markup highlight
+- `#dl` or `#del` : items that contain a Critic Markup deletion
+- `#in` or `#ins` : items that contain a Critic Markup insertion
+- `#em` or `#emph` : items that contain a Markdown `em` element
+- `#st` or `#str` or `#strong` : items that contain a Markdown `strong` element
+- `#job` : items that have the property “job”. Properties should be added at the end of a path segment. With the following example text, this query with show “John”. Add `/` to the query to also reveal the line `job : developer`.
 
-`not @done`
-: items not tagged @done . Note that currently, if an item is tagged @done but has subitems, it will not be hidden.
-
-`;misc`
-: headings that contain the text 'misc'
-
-`;misc items`
-: headings that contain both 'misc' and 'items'
-
-`;misc or items`
-: headings that contain either 'misc' or 'items'
-
-`misc/today tomorrow`
-: items that contain both 'today' and 'tomorrow under an item that contains 'misc'.
-
-`;code;fold text`
-: heading that contains both 'fold' and 'text' under a heading that contains 'code'.
-
-`yesterday today and tomorrow`
-: items that contains 'yesterday' and 'today' and 'tomorrow'. When only one boolean operator is used with three or more terms, this operator is used as the default.
-
-`yesterday or today and tomorrow`
-: items that contains 'yesterday' and 'today' and 'tomorrow'. When a mix of 'and' and 'or' is used, 'or's are changed to 'and'.
-
-any expression ending with `/`
-: show descendants (descendants are always shown if the last segment in the expression is a heading)
-
-`#cm`
-: items that contain a Critic Markup command/annotation
-
-`#hl`
-: items that contain a Critic Markup highlight
-
-`#dl` or `#del`
-: items that contain a Critic Markup deletion
-
-`#in` or `#ins`
-: items that contain a Critic Markup insertion
-
-`#em` or `#emph`
-: items that contain a Markdown `em` element
-
-`#st` or `#str` or `#strong`
-: items that contain a Markdown `strong` element
-
-`#job`
-: items that have the property “job”. Properties should be added at the end of a path segment. With the following text, this query with show “John”.
-
-    John
-        job : developer
-
-Add `/` at end to also reveal `job : developer`
-
-`#job~dev`
-: items that have the property “job” with a value containing “dev”. When using a comparison operator (e.g. `~` – see next item for more), the `#` prefix is unnecessary.
-
-`age>30`, `age<20`, `age>=25`
-: items that have the property “age” with values < 30, etc.
-
-any expression starting or ending with `|`
-: don't show ancestors
-
-any expression starting with `/`
-: use FoldingText's full XPath syntax instead of the modified syntax described here. See documentation on the [FoldingText website](http://www.foldingtext.com/sdk/nodepaths/).
+        John
+            job : developer
+- `#job~dev` : items that have the property “job” with a value containing “dev”. When using a comparison operator (e.g. `~` – see next item for more), the `#` prefix is unnecessary.
+- `age>30`, `age<20`, `age>=25` : items that have the property “age” with values < 30, etc.
+- any expression starting or ending with `|` : don't show ancestors
+- any expression starting with `/` or `(/` : use FoldingText's full XPath syntax instead of the modified syntax described here. See documentation on the [FoldingText website](http://www.foldingtext.com/sdk/nodepaths/).
 
 ## Change log
 
@@ -114,5 +71,4 @@ any expression starting with `/`
 
 ## Planned Features
 
-- Use new query to combine with current view: union, intersect, or not.
 - Save named queries.
