@@ -2,9 +2,11 @@
 
 By [Jamie Kowalski](github.com/jamiekowalski/foldingtext-extra)
 
-Add custom inline markup definitions. Predefined: `{}` for inline comment and || for inline highlight. Since these are given the attributes 'comment' and 'highlight', respectively, they are treated as Critic Markup in FoldingText and can be selected as such in a node path (and with `#cm` and `#hl` in my filter plugin).
+Add custom inline markup definitions. Predefined: `{}` for inline comment and || for inline highlight. Since these are given the attributes 'comment' and 'highlight', respectively, they can be selected as such in a node path (and with `#cm` and `#hl` in my filter plugin).
 
 Requires [FoldingText 2.0](http://support.foldingtext.com/discussions/development-versions)
+
+Note: if using the 'toggle critic' plugin, be sure to download the latest version for compatibility with the custom comment syntax.
 
 ## Usage
 
