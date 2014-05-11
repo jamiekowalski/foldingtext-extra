@@ -2,9 +2,9 @@
 
 By [Jamie Kowalski](github.com/jamiekowalski/foldingtext-extra)
 
-Add custom inline markup definitions. Predefined: inline comments and highlights like so: `{this is a comment}` `|this is highlighted|`. Since these are given the attributes 'comment' and 'highlight' they can be selected in a node path with `@line:comment` and `@line:highlight` (or with `#cm` and `#hl` in my filter plugin).
+Add custom inline markup definitions. Predefined: inline comments and highlights like so: `{this is a comment}` `|this is highlighted|`. These are given the attributes 'comment' and 'highlight' and can be selected in a node path with `@line:comment` and `@line:highlight` (or with `#cm` and `#hl` in my filter plugin).
 
-Note: if using the 'toggle critic' plugin, be sure to download the latest version of that plugin for compatibility with the custom comment syntax.
+Note: if using the 'toggle critic' or 'filter' plugins, be sure to download the latest version of those for compatibility with the custom comment syntax.
 
 Requires [FoldingText 2.0](http://support.foldingtext.com/discussions/development-versions)
 

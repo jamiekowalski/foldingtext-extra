@@ -43,7 +43,6 @@ define(function(require, exports, module) {
       return;
     }
     for (var option in markup) {
-      console.log(typeof option, option instanceof String);
       if ( typeof option !== 'string' && ! (option instanceof String) ) {
         console.log("Custom markup definition: options must be of type string");
         return;
@@ -56,7 +55,12 @@ define(function(require, exports, module) {
 
     markup.index = -1; // initialize index
 
-    regexStr += '|' + regexEsc(markup.start) + '|' + regexEsc(markup.end) + '|';
+    if (! markup.regex) {
+      markup.start = regexEsc(markup.start);
+      markup.end = regexEsc(markup.end);
+    }
+    regexStr += '|' + markup.start + '|' + markup.end + '|';
+    
     clearAttributes.push(markup.attr, markup.syntaxAttr);
 
     markupDefs.push(markup);
@@ -93,27 +97,42 @@ define(function(require, exports, module) {
         for (var i = 0; i < markupDefs.length; i++) {
           var markup = markupDefs[i];
           
-          if ( markup.index >= 0 && match[0] === markup.end ) {
+          var startMatch = match[0].match(markup.start);
+          var endMatch = match[0].match(markup.end);
+          
+          if ( markup.index >= 0 && endMatch) {
             // within markup span, and end syntax just found
+      
+            var start;
+            var end;
+            
+            if (markup.regex) {
+              start = markup.startMatch[1];
+              end = endMatch[1];
+            } else {
+              start = markup.start;
+              end = markup.end;
+            }
         
             var contentString = text.textSubstring(markup.index, match.index + markup.end.length);
             
-            text.addAttributeInRange(markup.syntaxAttr, markup.start, markup.index, 
-              markup.start.length);
+            text.addAttributeInRange(markup.syntaxAttr, start, markup.index, 
+              start.length);
             text.addAttributeInRange(markup.attr,
-              contentString.substring(markup.start.length, contentString.length - markup.end.length), 
+              contentString.substring(start.length, contentString.length - end.length), 
               markup.index, contentString.length);
-            text.addAttributeInRange(markup.syntaxAttr, markup.end, 
-              match.index, markup.end.length);
+            text.addAttributeInRange(markup.syntaxAttr, end, 
+              match.index, end.length);
             
             // no longer within this syntax; reset index
             markup.index = -1;
             break; // don't consider other markups for this match
             
-          } else if ( markup.index < 0 && match[0] === markup.start ) {
+          } else if ( markup.index < 0 && startMatch ) {
             // not in markup span, and start syntax just found
             
             markup.index = match.index;
+            markup.startMatch = startMatch;
             break; // don't consider other markups for this match
             
           }

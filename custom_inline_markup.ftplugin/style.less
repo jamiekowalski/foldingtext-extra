@@ -1,5 +1,30 @@
-.CodeMirror .cm-comment.cm-custom-keyword { // more specificity to override default
+.cm-comment.cm-text {
+    background-color: rgba(0, 55, 240, 0.07);
+    color: #999; //#666;
+    font-style: italic;
+}
+.cm-comment.cm-keyword {
+    color: gray; // #848BFF;
+    font-style: normal;
+}
+.cm-deletion {
+  color: #FF523D;
+}
+.cm-comment.cm-em {
+    font-weight: bold;
+}
+.cm-comment.cm-strong {
+    font-style: normal;
+}
+.cm-comment.cm-custom-keyword { // more specificity to override default
   font-style: normal;
+}
+.cm-highlight.cm-text {
+    background-color: rgba(250, 184, 0, 0.4);
+    color: #DE7D1A;
+}
+.cm-highlight.cm-keyword {
+    color: #A6784F;
 }
 .cm-highlight.cm-custom-keyword {
   color: #DE9D6C;
