@@ -6,6 +6,11 @@
 define(function(require, exports, module) {
   'use strict';
   
+  // config
+  var customMarkup = true,  // allow #cm and #hl to also match 'comment' 'highlight'
+                            // as defined in 'custom inline markup' plugin
+    debug = false
+  
   var Extensions = require('ft/core/extensions'),
       NodePath = require('ft/core/nodepath').NodePath,
       Panel = require('../jmk_panel.ftplugin/jmk_panel.js').Panel,
@@ -21,8 +26,7 @@ define(function(require, exports, module) {
       tagRegexString = '@((?:' + tagStartChars + '(?:' + tagStartChars + '|' + tagWordChars + ')*)?)',
       selectionBug = false,
       selectionBugFirstChar,
-      selectionBugDetermined = false,
-      debug = false
+      selectionBugDetermined = false
   
   // TODO check support for quote-wrapped terms
   // TODO automatically enclose terms that don't match \w+ with quotes
@@ -76,8 +80,10 @@ define(function(require, exports, module) {
   function parseSegment( input, heading_marker ) {
     var s = input.trim(),
         defaultOp = 'and',
-        heading_marker_regex = new RegExp( '^' + heading_marker + '\\s*' )
-  
+        heading_marker_regex = new RegExp( '^' + heading_marker + '\\s*' ),
+        commentStr = customMarkup ? '(@line:criticcomment or @line:comment)' : '@line:criticcomment',
+        highlightStr = customMarkup ? '(@line:critichighlight or @line:highlight)' : '@line:critichighlight'
+          
     if ( ! s ) {
         return '';
     }
@@ -106,8 +112,8 @@ define(function(require, exports, module) {
     s = s.replace(/([^'"]|^)(union|intersect|except)([^'"]|$)/, '"$2"');
 
     // transform inline types and properties
-    s = s.replace(/#cm\b/g, '@line:comment');
-    s = s.replace(/#hl\b/g, '@line:highlight');
+    s = s.replace(/#cm\b/g, commentStr);
+    s = s.replace(/#hl\b/g, highlightStr);
     s = s.replace(/#de?l\b/g, '@line:del');
     s = s.replace(/#ins?\b/g, '@line:ins');
     s = s.replace(/#str?o?n?g?\b/g, '@line:strong');
@@ -122,7 +128,7 @@ define(function(require, exports, module) {
     var input = input.trim(),
         delim = '/',
         heading_marker = ';',
-        // NOTE: following must be regex escaped!
+        // NOTE: following must be regex escaped! TODO maybe do this in code
         ancestors_off = '\\|',    // can be at start or end
         union_marker = '\\+',     // start only
         intersect_marker = '\\*', // start only
