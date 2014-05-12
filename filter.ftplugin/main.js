@@ -7,10 +7,18 @@ define(function(require, exports, module) {
   'use strict';
   
   // config
-  var customMarkup = true,  // allow #cm and #hl to also match 'comment' 'highlight'
-                            // as defined in 'custom inline markup' plugin
-    debug = false
+  var delim = '/',           // can be anywhere in expression
+    heading_marker = ';',    // can be anywhere in expression
+    ancestors_off = '|',     // can be at start or end
+    union_marker = '+',      // start only
+    intersect_marker = '*',  // start only
+    except_marker = '-',     // start only
+    customMarkup = true,     // allow #cm and #hl to also match 'comment' 'highlight'
+                             // as defined in 'custom inline markup' plugin
+    filterOnTextChange = true,
+    debug = false;
   
+  // internal variables
   var Extensions = require('ft/core/extensions'),
       NodePath = require('ft/core/nodepath').NodePath,
       Panel = require('../jmk_panel.ftplugin/jmk_panel.js').Panel,
@@ -26,15 +34,27 @@ define(function(require, exports, module) {
       tagRegexString = '@((?:' + tagStartChars + '(?:' + tagStartChars + '|' + tagWordChars + ')*)?)',
       selectionBug = false,
       selectionBugFirstChar,
-      selectionBugDetermined = false
+      selectionBugDetermined = false;
   
-  // TODO check support for quote-wrapped terms
-  // TODO automatically enclose terms that don't match \w+ with quotes
+  // from http://stackoverflow.com/questions/3561493/is-there-a-regexp-escape-function-in-javascript  
+  function regexEsc(s) {
+    return s.replace(/[-\\^$*+?.()|[\]{}]/g, '\\$&');
+  };
+
+  // escape the syntax characters
+  delim = regexEsc(delim);
+  heading_marker = regexEsc(heading_marker);
+  ancestors_off = regexEsc(ancestors_off);    // can be at start or end
+  union_marker = regexEsc(union_marker);     // start only
+  intersect_marker = regexEsc(intersect_marker); // start only
+  except_marker = regexEsc(except_marker);    // start only
   
   // insert boolean operators between tokens
   function insertOps( string, custom_default ) {
     string = string.trim()
     if (! string.match(/ /)) return string  // if no spaces, return immediately
+
+    // TODO add support for quote-wrapped terms
 
     var protector = '=_=',  // TODO Hack!
       ops = [
@@ -109,13 +129,17 @@ define(function(require, exports, module) {
     
     // allow paths to contain "union" "intersect" "except"; by wrapping in quotes
     // TODO maybe should allow these as functions instead?
-    s = s.replace(/([^'"]|^)(union|intersect|except)([^'"]|$)/, '"$2"');
+    s = s.replace(/([^'"]|^)\b(union|intersect|except)\b([^'"]|$)/, '"$2"');
+    
+    // allow paths to contain "note" TODO is this a bug in FoldingText?
+    s = s.replace(/([^'"]|^)\b(notes?)\b([^'"]|$)/, '"$2"');
 
     // transform inline types and properties
     s = s.replace(/#cm\b/g, commentStr);
     s = s.replace(/#hl\b/g, highlightStr);
-    s = s.replace(/#de?l\b/g, '@line:del');
-    s = s.replace(/#ins?\b/g, '@line:ins');
+    s = s.replace(/#de?l\b/g, '@line:criticdeletion');
+    s = s.replace(/#ins?\b/g, '@line:criticinsertion');
+    s = s.replace(/#sub\b/g, '@line:criticsubstitution');
     s = s.replace(/#str?o?n?g?\b/g, '@line:strong');
     s = s.replace(/#em(ph)?\b/g, '@line:em');
     s = s.replace(/#([^\s:]+)\b/g, '@property:$1');
@@ -126,15 +150,8 @@ define(function(require, exports, module) {
 
   function parsePath( input ) {
     var input = input.trim(),
-        delim = '/',
-        heading_marker = ';',
-        // NOTE: following must be regex escaped! TODO maybe do this in code
-        ancestors_off = '\\|',    // can be at start or end
-        union_marker = '\\+',     // start only
-        intersect_marker = '\\*', // start only
-        except_marker = '\\-',    // start only
         ancestors,
-        descendants
+        descendants;
   
     if (! input) {
       return input;
@@ -212,13 +229,13 @@ define(function(require, exports, module) {
   
   function filterByPath(path) {
     if (path && ! path.match(/^ +$/)) {
-        
-      var parse_result = NodePath.parse(path)
+      var parse_result = NodePath.parse(path, undefined, 
+        editor.tree().taxonomy.types());
       if (parse_result.errorColumn > -1) {
         console.log(path + '\n' + "Path failed at: " +
           parse_result.errorColumn)
       } else {
-        if (debug) console.log(path)
+        if (debug) console.log('Final path: ' + path);
         editor.setNodePath(path);
         editor.performCommand('scrollToBeginningOfDocument');
       }
@@ -260,7 +277,8 @@ define(function(require, exports, module) {
   });
   
   Extensions.add('com.foldingtext.editor.init', function(ed) {
-    editor = ed;             // TODO This is a hack
+    editor = ed;             // copy editor to wider scope
+                             // TODO This is a hack
     if (editor.tree().taxonomy.name === 'markdown') {
       headingType = 'heading'
     } else {
@@ -285,8 +303,11 @@ define(function(require, exports, module) {
                                        // menu, and when to simply filter
           
         } else {
-          panel.hideMenu(); // TODO this will almost always be pointless
-          filterByPath(parsePath(panel.input.value)); 
+          panel.hideMenu();
+          
+          if (filterOnTextChange) {            
+            filterByPath(parsePath(panel.input.value));
+          }
         }
       },
       onMenuSelect: function (event, panel, value) {

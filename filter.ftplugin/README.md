@@ -20,6 +20,8 @@ Download the [ZIP of this repository](https://github.com/jamiekowalski/foldingte
 
 Important: this plugin requires `jmk_panel.ftplugin`.
 
+Variables at the top of the `main.js` file can be customized, e.g. set `filterOnTextChange` to `false` to only change node path upon closing the panel. Modifying the syntax characters is possible, but may cause bugs.
+
 ## Examples of expressions:
 
 - `@important` : items tagged @important . Note that tag matches must be exact; `@im` will not match an item tagged `@important`. This is in contrast to text matches.
