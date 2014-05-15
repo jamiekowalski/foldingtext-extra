@@ -6,10 +6,17 @@
  * To use:
  * 
  * var addMarkup = require('./custom_inline_markup.js').addMarkup;
- * addMarkup( {start:'{', end:'}', attr:'comment', syntaxAttr:'custom-keyword'} );
+ * addMarkup({
+ *   start: '{',
+ *   end: '}',
+ *   attr: 'comment',
+ *   syntaxAttr: 'custom-keyword',
+ *   regex: false
+ * });
  *
- * For each markup definition, required properties are 'start' and 'attr'. 
- * The attributes are used as classes, prefixed with 'cm-'
+ * For each markup definition, required properties are 'start' and 'attr'. 'end' 
+ * defaults to match 'start', 'syntaxAttr' defaults to 'keyword', 'regex' defaults to
+ * false. The attributes are used as classes, prefixed with 'cm-'
  * 
  * ----------------------------------------------------------------------------- */
 
@@ -105,24 +112,41 @@ define(function(require, exports, module) {
       
             var start;
             var end;
+            var startIndex = markup.index;
+            var endIndex = match.index;
             
             if (markup.regex) {
-              start = markup.startMatch[1];
-              end = endMatch[1];
+              if ( markup.startMatch[2] ) {
+                start = markup.startMatch[2];
+                startIndex += markup.startMatch[1].length;
+              } else if ( markup.startMatch[1] ) {
+                start = markup.startMatch[1];
+              } else {
+                start = markup.startMatch[0];
+              }
+              
+              if ( endMatch[2] ) {
+                end = endMatch[2];
+                endIndex += endMatch[1].length;
+              } else if ( endMatch[1] ) {                
+                end = endMatch[1];
+              } else {
+                end = endMatch[0];
+              }
             } else {
               start = markup.start;
               end = markup.end;
             }
         
-            var contentString = text.textSubstring(markup.index, match.index + markup.end.length);
+            var contentString = text.textSubstring(startIndex, endIndex + end.length);
             
-            text.addAttributeInRange(markup.syntaxAttr, start, markup.index, 
+            text.addAttributeInRange(markup.syntaxAttr, start, startIndex, 
               start.length);
             text.addAttributeInRange(markup.attr,
               contentString.substring(start.length, contentString.length - end.length), 
-              markup.index, contentString.length);
+              startIndex, contentString.length);
             text.addAttributeInRange(markup.syntaxAttr, end, 
-              match.index, end.length);
+              endIndex, end.length);
             
             // no longer within this syntax; reset index
             markup.index = -1;
