@@ -1,0 +1,10 @@
+{
+    "name": "Basic Theme",
+    "version": "0.3.0",
+    "description": "Custom theme for FoldingText.",
+    "engines": {
+        "foldingtext": ">=2.0.0",
+        "taskpaper": ">=3.0.0"
+    },
+    "homepage": "https://github.com/jamiekowalski/"
+}

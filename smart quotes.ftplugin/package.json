@@ -1,0 +1,10 @@
+{
+    "name": "Smart Quotes",
+    "version": "0.3.0",
+    "description": "Auto-insert smart quotes. Supports multiple quotation mark styles.",
+    "engines": {
+        "foldingtext": ">=2.0.0",
+        "taskpaper": ">=3.0.0"
+    },
+    "homepage": "https://github.com/jamiekowalski/"
+}

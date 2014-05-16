@@ -1,0 +1,10 @@
+{
+    "name": "Improve Typography",
+    "version": "0.2.0",
+    "description": "Insert smart quotes, and other typographic transformations.",
+    "engines": {
+        "foldingtext": ">=2.0.0",
+        "taskpaper": ">=3.0.0"
+    },
+    "homepage": "https://github.com/jamiekowalski/"
+}

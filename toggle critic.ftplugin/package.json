@@ -1,0 +1,10 @@
+{
+    "name": "Toggle Critic Markup",
+    "version": "0.1.0",
+    "description": "Expand/collapse Critic Markup comments and deletions.",
+    "engines": {
+        "foldingtext": ">=2.0.0",
+        "taskpaper": ">=3.0.0"
+    },
+    "homepage": "https://github.com/jamiekowalski/"
+}

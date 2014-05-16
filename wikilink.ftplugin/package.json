@@ -1,0 +1,10 @@
+{
+    "name": "Wiki Link",
+    "version": "0.2.0",
+    "description": "Add [[wiki link]] syntax for linking to external documents or internal headings.",
+    "engines": {
+        "foldingtext": ">=2.0.0",
+        "taskpaper": ">=3.0.0"
+    },
+    "homepage": "https://github.com/jamiekowalski/"
+}

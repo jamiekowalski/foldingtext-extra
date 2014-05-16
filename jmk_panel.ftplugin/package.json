@@ -1,0 +1,10 @@
+{
+    "name": "Panel Module",
+    "version": "0.4.1",
+    "description": "Panel module for FoldingText plugins.",
+    "engines": {
+        "foldingtext": ">=2.0.0",
+        "taskpaper": ">=3.0.0"
+    },
+    "homepage": "https://github.com/jamiekowalski/"
+}

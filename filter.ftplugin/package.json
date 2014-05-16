@@ -1,0 +1,10 @@
+{
+    "name": "Filter Panel",
+    "version": "0.4.1",
+    "description": "Panel for live filtering with concise syntax",
+    "engines": {
+        "foldingtext": ">=2.0.0",
+        "taskpaper": ">=3.0.0"
+    },
+    "homepage": "https://github.com/jamiekowalski/"
+}
