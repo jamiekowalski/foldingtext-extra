@@ -19,7 +19,7 @@ define(function(require, exports, module) {
     debug = false;
   
   // internal variables
-  var Extensions = require('ft/core/extensions'),
+  var Extensions = require('ft/core/extensions').Extensions,
       NodePath = require('ft/core/nodepath').NodePath,
       Panel = require('../jmk_panel.ftplugin/jmk_panel.js').Panel,
       editor,         // this variable is assigned in the 'init' function below
@@ -263,12 +263,12 @@ define(function(require, exports, module) {
     panel.hide(false);
   }
     
-  Extensions.add('com.foldingtext.editor.commands', {
+  Extensions.addCommand({
     name: 'show filter panel',
     performCommand: showFilterPanel
   });
   
-  Extensions.add('com.foldingtext.editor.commands', {
+  Extensions.addCommand({
     name: 'show filter panel with tags',
     performCommand: function() {
       showFilterPanel('@', 'end');
@@ -276,7 +276,7 @@ define(function(require, exports, module) {
     }
   });
   
-  Extensions.add('com.foldingtext.editor.init', function(ed) {
+  Extensions.addInit(function(ed) {
     editor = ed;             // copy editor to wider scope
                              // TODO This is a hack
     if (editor.tree().taxonomy.name === 'markdown') {

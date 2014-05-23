@@ -42,7 +42,7 @@ define(function(require, exports, module) {
         
     }
 
-	var Extensions = require('ft/core/extensions');
+  	var Extensions = require('ft/core/extensions').Extensions;
 
     function defineSmartQuotes(editor, lang, kb) {
         var sq = SmartQuotes,
@@ -158,7 +158,7 @@ define(function(require, exports, module) {
         editor.replaceSelection(quote, 'end');
 	}
     
-    Extensions.add('com.foldingtext.editor.init', function(editor) {        
+    Extensions.addInit(function(editor) {        
         defineSmartQuotes(editor) // no additional args: use defaults
     });
     

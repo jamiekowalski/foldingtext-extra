@@ -1,4 +1,4 @@
-/* ------------------------------------------------------------- *
+/* ----------------------------------------------------------------------------- *
  * Panel Module for FoldingText 2.0 Plugins
  * by Jamie Kowalski, github.com/jamiekowalski/foldingtext-extra
  * Reuse permitted without restriction, provided this attribution is included
@@ -30,12 +30,12 @@
  *   addToDOM: true
  * });
  *
- * ------------------------------------------------------------- */
+ * ----------------------------------------------------------------------------- */
 
 define(function(require, exports, module) {
   'use strict';
   
-  var Extensions = require('ft/core/extensions'),
+  var Extensions = require('ft/core/extensions').Extensions,
     debug = false,
     getCaretCoordinates = require('./textarea-caret-position/index.js').Coordinates,
     selectionBug = {
@@ -143,20 +143,22 @@ define(function(require, exports, module) {
     this.input.addEventListener('input', (function(event) {
       if (debug) console.log( 'input change event: \'' + this.input.value + '\'' );
       
-	  if (! selectionBug.determined) {
-		  if (this.input.value.length === 1) {
-			selectionBug.firstChar = this.input.value;
-		  } else if (this.input.value.length === 2) {
-			if (this.input.value.charAt(0) === selectionBug.firstChar 
-			  && this.input.selectionStart === 1) {
-				// could give false positive in this case:
-				// enter char 'a', move cursor back and enter same letter
-				selectionBug.exists = true;
-			}
-			selectionBug.determined = true;
-		  }
-		}
-      
+      // basic test for the Mountain Lion selection range bug on the 'input' event
+  	  if (! selectionBug.determined) {
+  		  if (this.input.value.length === 1) {
+    			selectionBug.firstChar = this.input.value;
+        
+  		  } else if (this.input.value.length === 2) {
+    			if (this.input.value.charAt(0) === selectionBug.firstChar 
+    			  && this.input.selectionStart === 1) {
+    				// could give false positive in this case:
+    				// enter char 'a', move cursor back and enter same letter
+    				selectionBug.exists = true;
+    			}
+        
+    			selectionBug.determined = true;
+  		  }
+  		}
       
       if (this.options.ignoreWhiteSpace) {
         if ( this.input.value.trim() === this.currentValue ) {
@@ -552,31 +554,34 @@ define(function(require, exports, module) {
     var selectionStart = this.input.selectionStart; // WARNING: doesn't support IE
     var selectionEnd = this.input.selectionEnd;
 
-	if (event && event.type === 'input') {
-	    // the bug only occurs during the 'input' event. During 'keydown' input has not 
-	    // changed; during 'keyup' input has changed and selection has been updated; but
-	    // during 'input', input has changed and (in Mountain Lion), selection in many
-	    // cases has *not* been updated.
+	  if (event && event.type === 'input') {
+	    // the bug only occurs during the 'input' event. During 'keydown' input has
+      // not  changed; during 'keyup' input has changed and selection has been
+      // updated; but during 'input', input has changed and (in Mountain Lion),
+      // selection in many cases has *not* been updated.
+      
+      // TODO this bug does not show after pressing forward/backward delete;
+      // should check for that
 	  
-		if (selectionBug.exists) {
-		  // prior to 10.9, selectionEnd is 1 less than it should be, but only after
-		  // the first character has been entered in the input. I.e. it's 1, 1, 2...
-		  // if there 
-		  if (! this.input.value.match(/^.?$/)) { // TODO heuristic; will not always work
-			if (selectionStart !== 0) {
-				selectionStart = selectionStart + 1;
-			}
-			if (selectionEnd !== 0) {
-			  selectionEnd = selectionEnd + 1;
-			}
-		  }
-		}
+  		if (selectionBug.exists) {
+  		  // prior to 10.9, selectionEnd is 1 less than it should be, but only after
+  		  // the first character has been entered in the input. I.e. it's 1, 1, 2...
+  		  // if there 
+  		  if (! this.input.value.match(/^.?$/)) { // TODO heuristic; will not always work
+    			if (selectionStart !== 0) {
+    				selectionStart = selectionStart + 1;
+    			}
+    			if (selectionEnd !== 0) {
+    			  selectionEnd = selectionEnd + 1;
+    			}
+  		  }
+  		}
     }
     
     return [selectionStart, selectionEnd];
   }
 
-  Extensions.add('com.foldingtext.editor.init', function( ed ) {
+  Extensions.addInit(function( ed ) {
     editor = ed;
   });
 

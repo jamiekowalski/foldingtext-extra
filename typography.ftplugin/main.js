@@ -1,9 +1,9 @@
 define(function(require, exports, module) {
     'use strict';
     
-	var Extensions = require('ft/core/extensions');
+	var Extensions = require('ft/core/extensions').Extensions;
 
-	Extensions.add('com.foldingtext.editor.commands', {
+	Extensions.addCommand({
 		name: 'typography',
 		description: 'Smarten quotes, etc.',
 		performCommand: function (editor) {

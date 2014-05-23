@@ -4,7 +4,7 @@
 define(function(require, exports, module) {
     'use strict';
 
-    var Extensions = require('ft/core/extensions'),
+    var Extensions = require('ft/core/extensions').Extensions,
         wikiLinkRE = /\[\[(.*?)\]\]/g,
         wikiLinkAttr = 'wikilink',
         wikiLinkClass = 'cm-' + wikiLinkAttr,

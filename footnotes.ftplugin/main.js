@@ -1,7 +1,7 @@
 define(function(require, exports, module) {
   'use strict';
 
-  var Extensions = require('ft/core/extensions')
+  var Extensions = require('ft/core/extensions').Extensions;
   
   // from http://stackoverflow.com/questions/10073699/pad-a-number-with-leading-zeros-in-javascript
   function padInt(n, width, z) {
@@ -43,11 +43,12 @@ define(function(require, exports, module) {
     editor.setSelectedRange(prevRange);
   }
   
-  Extensions.add('com.foldingtext.editor.init', function (editor) {
+  Extensions.addInit(function (editor) {
     editor.addKeyMap({
     'Shift-Cmd-F' : function(editor) {
       insertFootnote(editor)
     }
     });
   });
+
 });

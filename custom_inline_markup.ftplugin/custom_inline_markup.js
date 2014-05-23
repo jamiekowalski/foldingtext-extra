@@ -23,7 +23,7 @@
 define(function(require, exports, module) {
   'use strict';
 
-  var Extensions = require('ft/core/extensions');
+  var Extensions = require('ft/core/extensions').Extensions;
 
   // from http://stackoverflow.com/questions/3561493/is-there-a-regexp-escape-function-in-javascript  
   function regexEsc(s) {

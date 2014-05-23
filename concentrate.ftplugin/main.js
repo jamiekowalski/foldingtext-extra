@@ -4,12 +4,12 @@
  * ***************************************** */
 
 define(function(require, exports, module) {
-	var Extensions = require('ft/core/extensions'),
+	var Extensions = require('ft/core/extensions').Extensions,
         Dom = require('ft/util/dom'),
         // UserDefaults = require('ft/core/userdefaults'),
         focusClass = 'jmk-concentrate'
 
-	Extensions.add('com.foldingtext.editor.commands', {
+	Extensions.addCommand({
 		name: 'concentrate',
 		description: 'Narrow your focus to the current sentence',
 		performCommand: function (editor) {
