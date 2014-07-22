@@ -4,7 +4,7 @@
 define(function(require, exports, module) {
     'use strict';
 
-    var defaultNV = true; // choose whether to default to NotationalVelocity/NVAlt
+    var defaultNV = false; // choose whether to default to NotationalVelocity/NVAlt
                           // for external links
 
     var Extensions = require('ft/core/extensions').Extensions,
