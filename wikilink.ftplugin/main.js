@@ -4,6 +4,9 @@
 define(function(require, exports, module) {
     'use strict';
 
+    var defaultNV = true; // choose whether to default to NotationalVelocity/NVAlt
+                          // for external links
+
     var Extensions = require('ft/core/extensions').Extensions,
         wikiLinkRE = /\[\[(.*?)\]\]/g,
         wikiLinkAttr = 'wikilink',
@@ -69,12 +72,18 @@ define(function(require, exports, module) {
           if (debug) console.log(path);
           editor.setNodePath(path);
           editor.performCommand('scrollToBeginningOfDocument');
-        } else if (t.charAt(0) === '@') {
-          t = t.substring(1).trim();
-          var URL = 'nv://find/' + encodeURIComponent(t);
-          editor.openLink(URL);
         } else {
-          var URL = 'ftwikilink://?' + encodeURIComponent(t);
+          var URL;
+          if (defaultNV) {
+            URL = 'nv://find/' + encodeURIComponent(t);
+          } else {
+            if (t.charAt(0) === '@') {
+              t = t.substring(1).trim();
+              URL = 'nv://find/' + encodeURIComponent(t);
+            } else {
+              URL = 'ftwikilink://?' + encodeURIComponent(t);
+            }
+          }          
           editor.openLink(URL);
         }
       }
