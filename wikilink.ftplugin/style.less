@@ -1,10 +1,23 @@
+// Uncomment following code to enable syntax hiding for wikilinks
+/*
+.cm-hidesyntax .cm-wikilink.cm-keyword {
+  display: inline-block;
+  line-height: 0;
+  width: 0;
+  height: 0;
+  visibility: hidden;
+}
+*/
 .cm-wikilink.cm-keyword {
   color: #bbb;
   text-decoration: none;
   cursor: default;
 }
 .cm-wikilink {
-  color: inherit;
+  color: @interfaceColor;
   text-decoration: underline;
   cursor: pointer;
+}
+.cm-wikilink:hover {
+  color: @indicatedColor;
 }

@@ -28,6 +28,8 @@ This extension will most likely fail to run at first because of the Gate Keeper 
 
 Before using, edit the settings at the top of `wikilink_search.rb`.
 
+To enable syntax hiding for wikilinks, uncomment the commented code in the `style.less` file.
+
 Requires [FoldingText 2.0](http://support.foldingtext.com/discussions/development-versions/)
 
 ## Known Issues
