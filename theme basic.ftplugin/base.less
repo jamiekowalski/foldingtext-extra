@@ -1,181 +1,203 @@
-/* ************************************************************** *
- * Theme for FoldingText 1.3 (version based on CodeMirror)
- * 
- * Author: Jamie Kowalski
- * Date:   November 2013
- * 
- * ************************************************************** */
+/* ============================================================== *
+ *  Theme for FoldingText 2.0
+ *
+ *  Author: Jamie Kowalski
+ *  Date:   November 2013 - July 2014
+ * ============================================================== */
 
-/* ************************************************************** *
+
+/* ============================================================== *
  *  Variables
- * ************************************************************** */
+ * ============================================================== */
 
-@fontFamily: Seravek, 'Source Sans Pro', Consolas, 'Courier Prime', Courier; // Seravek is on OS X 10.9
+@monospaceFont: 'TheSansMono Office', Consolas, Menlo, monospace;
+@proportionalFont: Seravek, 'Source Sans Pro'; // Seravek is on OS X 10.9
+@fontFamily: @proportionalFont;
+@fontSize: 1.1em;         // FoldingText uses this setting on the body element
 @inkColor: black;
 @textColor: @inkColor;
 @deskColor: #FEFCF6;
 @paperColor: @deskColor;
 @keywordColor: mix(@textColor, @paperColor, 25%);
 
-@lineHeight: 1.25;
+// @lineHeight: 1.25;   // reducing line height interferes with .calc widget style
 @tabSize: 8;
 @selectionLeftFillTo: margin;
 @paperTopMargin:    4rem;
 @paperRightMargin:  4rem;
 @paperLeftMargin:   4rem;
 
-@codeblockFontSize:   90%;
-@codeblockFontFamily: Consolas, Menlo, monospace;
-@codeblockColor: black;
-@codeblockBackgroundColor: mix(transparent, @textColor, 97%);
-@codeblockBorder: 1px solid mix(transparent, @textColor, 75%);
-@codeblockBorderRadius: 0.2rem;
+@codeFontSize:   95%;
+@codeFontFamily: @monospaceFont;
+@codeColor: black;
+@codeBackgroundColor: mix(transparent, @textColor, 98%);
+@codeBorder: 1px solid mix(transparent, @textColor, 93%);
+@codeBorderRadius: 6px;
+
+@tagBackgroundColor: @codeBackgroundColor;
+@tagBorder: @codeBorder;
+@tagBorderRadius: @codeBorderRadius;
 
 @interfaceColor: #5A88C7;
 @cursorColor: @interfaceColor;
-// @paperBottomMargin: 4rem;
 
-// @selectionBackgroundColor
-// @focusedSelectionBackgroundColor
-
-/* ************************************************************** *
- *  General
- * ************************************************************** */
+/* ============================================================== *
+ *  General 
+ * ============================================================== */
 
 body {
     -webkit-font-smoothing: subpixel-antialiased !important;
-    text-rendering: optimizeSpeed; // this set in FoldingText default
-    font-size: 1.05em;
-}
-
-.line-select-position {
-    margin-top: -3px;
-}
-
-.CodeMirror div.CodeMirror-textDropCursor { // textDropCursor is used when insteting
-                                            // dragged text
-    border-color: #333;
-    // .line-select-position;
-}
-.CodeMirror div.CodeMirror-textDropCursor {
-    border-color: black;
-}
-
-.cm-selected-text {
-    color: rgb(256,253,240);
-}
-
-.cm-unordered .cm-lead,
-.cm-ordered .cm-lead {
-    color: #5A88C7 !important;
-}
-.cm-unordered .cm-lead {
-    font-weight: bold;
+    text-rendering: optimizeSpeed; // this is set in FoldingText default
 }
 
 .CodeMirror {
-    .cm-code,
-    .cm-codeblock,
-    .cm-fencedcodestart,
-    .cm-fencedcode,
-    .cm-fencedcodeend {
-      font-family: Consolas, Menlo, monospace;
-    }
-    .cm-code {
-      background: rgba(0, 0, 0, 0.08);
-    }
-}
 
-.CodeMirror {
-  .cm-codeblock, .cm-htmlblock, .cm-fencedcode,
-  .cm-fencedcodetopboundary, .cm-fencedcodebottomboundary {
-	  font-family: @codeblockFontFamily;
-    font-weight: normal;
-  	background: @codeblockBackgroundColor;
+  .line-select-position {
+      margin-top: -3px;
   }
+  .CodeMirror div.CodeMirror-textDropCursor { // textDropCursor is used when 
+                                              // inserting dragged text
+      border-color: #333;
+      // .line-select-position;
+  }
+  .CodeMirror div.CodeMirror-textDropCursor {
+      border-color: black;
+  }
+  .cm-selected-text {
+      color: rgb(256,253,240);
+  }
+  .cm-unordered .cm-list-bullet,
+  .cm-ordered .cm-lead {
+      color: #5A88C7 !important;
+  }
+}
 
-  .cm-fencedcodetopboundary .cm-keyword, .cm-fencedcodebottomboundary .cm-keyword {
-	  font-family: @codeblockFontFamily;
-    font-weight: normal;
+/* ============================================================== *
+ *  Headings 
+ * ============================================================== */
+
+.CodeMirror {
+  .cm-heading[cm-level="1"] {
+    font-size: 1.4em;
+  }
+  .cm-heading[cm-level="2"] {
+    font-size: 1.1em;
+  }
+  .cm-heading .cm-lead {
+    cursor: pointer;
+  }
+}
+
+/* ============================================================== *
+ *  Special item types 
+ * ============================================================== */
+
+.CodeMirror {
+  .cm-keyword {
     color: @keywordColor;
   }
-
-  .cm-fencedcodetopboundary {
-  	border-top: @codeblockBorder;    
-  }
-  .cm-fencedcodebottomboundary {
-  	border-bottom: @codeblockBorder;
-  }
-}
-
-.cm-code {
-	font-size: @codeblockFontSize;
-	font-family: @codeblockFontFamily;
-	color: @codeblockColor;
-}
-
-.cm-code-start {
-	margin-left: 0.1rem;
-	border-left: @codeblockBorder;
-	border-top-left-radius: @codeblockBorderRadius;
-	border-bottom-left-radius: @codeblockBorderRadius;
-}	
-
-.cm-code-end {
-	margin-right: 0.1rem;
-	border-right: @codeblockBorder;
-	border-top-right-radius: @codeblockBorderRadius;
-	border-bottom-right-radius: @codeblockBorderRadius;
-}
-
-.CodeMirror {
-  .cm-tag-start,
-  .cm-tagname,
-  .cm-tag-end {
-    border: 1px solid rgba(0,0,0,0.06);
-    background: rgba(0,0,0,0.04);
-  }
-  .cm-tag-start {
-    padding-left: 2px;
-    border-radius: 5px 0 0 5px;
-    border-right: none;
-  }
-  .cm-tag-end {
-    padding-right: 2px;
-    border-radius: 0 5px 5px 0;
-    border-left: none;
-  }
-  .cm-tagname:hover {
-    color: mix(@interfaceColor, #ffffff, 80%);
-    text-decoration: none;
-  }
-}
-
-/* ************************************************************** *
- *  Special item types 
- * ************************************************************** */
-
-.CodeMirror {
-    .cm-heading[cm-level="1"] {
-        font-size: 1.4em;
-        // text-indent: -15.9pt !important;
-    }
-    .cm-heading[cm-level="2"] {
-        font-size: 1.1em;
-        // text-indent: -21pt !important;
-    }
-}
-.cm-mode {
+  .cm-mode {
     font-weight: normal;
-}
-
-/* == Properties =================================================== */
-
-.cm-propertyname {
+  }
+  .cm-propertyname {
     font-weight: normal;
     font-style: italic;
     color: #aaa;
-}
-.cm-propertyvalue {
+  }
+  .cm-propertyvalue {
     font-style: normal;
+  }
+}
+
+/* ============================================================== *
+ *  Modes
+ * ============================================================== */
+
+.CodeMirror {
+  .cm-calc-modecontext,
+  .cm-calc-renderwidget {
+    font-family: @monospaceFont;
+  }
+  .cm-calc-modecontext.cm-heading {
+    font-family: inherit;
+  }
+}
+
+/* ============================================================== *
+ *  Code
+ * ============================================================== */
+
+.CodeMirror {
+  .cm-code,
+  .cm-codeblock,
+  .cm-fencedcode,
+  .cm-fencedcodetopboundary,
+  .cm-fencedcodebottomboundary,
+  .cm-htmlblock {
+    font-family: @codeFontFamily;
+    font-size: @codeFontSize;
+  }
+  
+  // inline code
+  .cm-code {
+    background: @codeBackgroundColor;
+    border-top: @codeBorder;
+    border-bottom: @codeBorder;
+  }
+  .cm-hidesyntax .cm-code {
+    border-radius: @codeBorderRadius;
+    border-left: @codeBorder;
+    border-right: @codeBorder;
+    padding-left: 4px;
+    padding-right: 4px;
+  }
+  .cm-hidesyntax .cm-code.cm-currentsyntax {
+    border-radius: 0;
+    padding-left: 0;
+    padding-right: 0;
+    border-left: none;
+    border-right: none;
+  }
+  .cm-code.cm-keyword {
+    padding-left: 0;
+    padding-right: 0;
+  }
+  .cm-code.cm-keyword,
+  .cm-hidesyntax .cm-code.cm-currentsyntax.cm-keyword {
+    border-radius: @codeBorderRadius 0 0 @codeBorderRadius;
+    border: @codeBorder;
+    border-right: none;
+  }
+  .cm-code + .cm-code.cm-keyword,
+  .cm-hidesyntax .cm-code + .cm-code.cm-keyword.cm-currentsyntax {
+    border-radius: 0 @codeBorderRadius @codeBorderRadius 0;
+    border: @codeBorder;
+    border-left: none;
+  }
+    
+  // fenced code block
+  .cm-fencedcodetopboundary .cm-keyword, .cm-fencedcodebottomboundary .cm-keyword {
+	  font-family: @codeFontFamily;
+    color: @keywordColor;
+  }
+  .cm-fencedcodetopboundary-background,
+  .cm-fencedcodebottomboundary-background,
+  .cm-fencedcode-background,
+  .cm-codeblock-background {
+    background-color: @codeBackgroundColor;
+    border: @codeBorder;
+    border-left-width: 2px;
+    border-top: none;
+    border-bottom: none;
+  }
+  .cm-fencedcodetopboundary-background,
+  .cm-codeblock-start-background {
+  	border-top: @codeBorder;
+    border-radius: @codeBorderRadius @codeBorderRadius 0 0;
+  }
+  .cm-fencedcodebottomboundary-background,
+  .cm-codeblock-end-background {
+  	border-bottom: @codeBorder;
+    border-radius: 0 0 @codeBorderRadius @codeBorderRadius;
+  }
 }

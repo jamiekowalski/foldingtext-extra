@@ -1,7 +1,32 @@
+/* == Tags general ============================================================== */
+
+.CodeMirror {
+  .cm-tag.cm-keyword,
+  .cm-tag.cm-tagname {
+    border: @tagBorder;
+    background: @tagBackgroundColor;
+  }
+  .cm-tag.cm-keyword {
+    padding-left: 2px;
+    border-radius: @tagBorderRadius 0 0 @tagBorderRadius;
+    border-right: none;
+  }
+  .cm-tag.cm-tagname {
+    padding-right: 4px;
+    border-radius: 0 @tagBorderRadius @tagBorderRadius 0;
+    border-left: none;
+    cursor: pointer;
+    text-decoration: none;
+  }
+  .cm-tagname:hover {
+    color: mix(@interfaceColor, #ffffff, 80%);
+  }
+}
+
 /* == Tags, etc ================================================================= */
 
 .leftBorder {
-    padding-left: 18px;   // doesn't work in 722
+    padding-left: 22px;
     border-left: 5px solid #ddd;
 }
 
@@ -43,10 +68,7 @@ pre[cm-done] .cm-text,
 pre[cm-done] .cm-tag,
 pre[cm-drop] .cm-text,      // dropped tasks
 pre[cm-drop] .cm-tag {
-  color: #c8c8c8 !important;
-}
-pre[cm-done].cm-unordered.cm-todo-modecontext span.cm-text {
-    text-decoration: none !important;
+  color: #a8a8a8 !important;
 }
 pre[cm-done] .cm-checkbox-renderwidget {
     opacity: 0.2;
