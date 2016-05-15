@@ -19,9 +19,6 @@ end
 
 # search folder strings may start with ~ for home folder; final slash is optional
 search_folders = [
-  '~/Dropbox/Notes/',
-  '~/Dropbox/Text Files/Reading Notes/',
-  '~/Desktop/',
 ]
 search_current_folder = true
 recursive = true                                # also search subfolders?
@@ -29,9 +26,7 @@ extensions = 'md,ft,txt,png,jpg,jpeg,pdf'       # comma-separated list
 ft_extensions = 'md,ft,txt'                     # set this to filetypes registered
                                                 # to open with FoldingText
 filter_delim = '#'
-applescript_path = Dir.home + '/Library/Containers/com.foldingtext.FoldingText/' + 
-  'Data/Library/Application Support/FoldingText/Plug-Ins/wikilink.ftplugin/' + 
-  'Open document with filter.scpt'
+applescript_path = File.join(File.dirname(__FILE__), 'Open document with filter.scpt')
 
 def openFile( file, filter_path, applescript_path, ft_extensions, filter_delim )
   
