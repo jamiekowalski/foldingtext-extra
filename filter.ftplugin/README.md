@@ -10,10 +10,6 @@ The extension can also be triggered with the keyboard shortcut Shift+Command+' (
 
 If the path cannot be parsed, a message is logged to the console. (Access the console in FoldingText choosing Help > SDK Runner and clicking the gear icon in the window that opens.)
 
-The extension can also be used with [TaskPaper 3](http://support.foldingtext.com/discussions/development-versions). In TaskPaper, `;` matches projects rather than headings.
-
-Requires [FoldingText 2.0](http://support.foldingtext.com/discussions/development-versions) build 723 or later, or [TaskPaper 3.0](http://support.foldingtext.com/discussions/development-versions).
-
 ## To Install
 
 Download the [ZIP of this repository](https://github.com/jamiekowalski/foldingtext-extra/archive/master.zip) and move `filter.ftplugin` and `jmk_panel.ftplugin` to your FoldingText plug-ins folder (open this from FoldingText by choosing File > Open Application Folder). Restart FoldingText.

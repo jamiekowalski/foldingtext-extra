@@ -12,8 +12,6 @@ Ellipses may be added in the future.
 
 Quotation mark style can be changed with the `lang` variable in the main.js file. Includes support for 'en', 'de', 'degu' (German-style guillemets), and 'fr'.
 
-Requires [FoldingText 1.3](http://support.foldingtext.com/discussions/development-versions/)
-
 ## Known Issues
 
 Smart quotes fail in the following instance:

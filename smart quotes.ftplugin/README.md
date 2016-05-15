@@ -18,8 +18,6 @@ Set the default language and keyboard in the script (look for the text `sq.defau
 
 To install, add the folder `smart quotes.ftplugin` to your FoldingText plugins folder (find this from the FoldingText app by choosing `File > Open Application Folder`). Quit and re-open FoldingText.
 
-Requires [FoldingText 2.0](http://support.foldingtext.com/discussions/development-versions)
-
 ## Known Issues
 
 In most cases, the plugin will insert the quote you want, but since it only looks at the previous character to determine whether to insert a left- or right-quote (and makes no attempt to match pairs), it will fail in the following cases:
