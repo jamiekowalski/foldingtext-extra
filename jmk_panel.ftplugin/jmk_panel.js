@@ -115,7 +115,7 @@ define(function(require, exports, module) {
       this.element.classList.add(this.options.className);
     }
     
-    this.element.insertBefore(this.input); // add the input to the panel
+    this.element.insertBefore(this.input, null); // add the input to the panel
     
     
     // EVENTS
@@ -303,7 +303,7 @@ define(function(require, exports, module) {
     
     // add panel to DOM    
     if ( this.options.addToDOM ) {
-      document.body.insertBefore( this.element );
+      document.body.insertBefore( this.element, null );
     }
   }
   
@@ -317,7 +317,7 @@ define(function(require, exports, module) {
   });
   
   p.prototype.addToDOM = function () {
-    document.body.insertBefore( this.element );
+    document.body.insertBefore( this.element, null );
   };
   p.prototype.show = function ( text, selection, selectionEnd ) {
     if ( (text && typeof text === 'string') || text === '' ) {
